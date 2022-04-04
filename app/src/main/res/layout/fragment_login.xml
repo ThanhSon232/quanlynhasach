@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_height="match_parent" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/login"
+    >
+    <TextView
+        android:layout_above="@id/emailLogin"
+        android:id="@+id/textID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Login"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/emailLogin"
+        android:layout_marginTop="10dp"
+        android:layout_centerInParent="true"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:inputType="textEmailAddress"
+        android:hint="email"
+        android:elevation="10dp"
+        android:background="@drawable/customlogininput"
+        android:drawablePadding="10dp"
+        android:paddingLeft="10dp"
+        />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/password"
+        android:layout_below="@id/emailLogin"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:inputType="textPassword"
+        android:hint="password"
+        android:elevation="10dp"
+        android:background="@drawable/customlogininput"
+        android:drawablePadding="10dp"
+        android:paddingLeft="10dp"
+        />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/black"
+        android:text="login"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loginButton"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:text="register"
+        android:textColor="@color/white" />
+
+
+
+
+
+</RelativeLayout>

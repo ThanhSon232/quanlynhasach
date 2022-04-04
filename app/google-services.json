@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "244253584029",
+    "project_id": "quanlynhasach-c1a4c",
+    "storage_bucket": "quanlynhasach-c1a4c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:244253584029:android:93574734924313b11b8274",
+        "android_client_info": {
+          "package_name": "com.example.quanlynhasach"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "244253584029-g2k25vf50g38gq17jkcka1g66gf8hcag.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkzs5oA74moQFaBX8xzL0qZ2nVS0lEGKw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "244253584029-g2k25vf50g38gq17jkcka1g66gf8hcag.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
