@@ -1,4 +1,4 @@
-package com.example.quanlynhasach;
+package com.example.quanlynhasach.fragment;
 
 import android.os.Bundle;
 
@@ -10,9 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.quanlynhasach.R;
+import com.example.quanlynhasach.fragment.registerFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;

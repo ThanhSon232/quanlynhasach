@@ -5,11 +5,11 @@ import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.quanlynhasach.fragment.loginFragment;
 
 public class login_register_fragment extends AppCompatActivity {
     FragmentManager fragmentManager = getSupportFragmentManager();
-    loginFragment loginFragment = new loginFragment();
+    com.example.quanlynhasach.fragment.loginFragment loginFragment = new loginFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

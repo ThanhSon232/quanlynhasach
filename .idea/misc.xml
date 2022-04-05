@@ -8,13 +8,16 @@
         <entry key="app/src/main/res/layout/activity_login_register_fragment.xml" value="0.2125" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1984375" />
         <entry key="app/src/main/res/layout/appbar.xml" value="0.1259259259259259" />
+        <entry key="app/src/main/res/layout/book.xml" value="0.1259259259259259" />
+        <entry key="app/src/main/res/layout/fragment_book.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.22327880859375" />
         <entry key="app/src/main/res/layout/fragment_receipt.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.1984375" />
         <entry key="app/src/main/res/layout/fragment_staff.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_header_nav.xml" value="0.22327880859375" />
+        <entry key="app/src/main/res/layout/up_item_fragment.xml" value="0.2411764705882353" />
         <entry key="app/src/main/res/menu/bottom_navigation.xml" value="0.2125" />
-        <entry key="app/src/main/res/menu/menu_nav.xml" value="0.2125" />
+        <entry key="app/src/main/res/menu/menu_nav.xml" value="0.1" />
         <entry key="app/src/main/res/menu/navigation.xml" value="1.457142857142857" />
       </map>
     </option>
