@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/list"
+            android:title="Danh sách"
+            />
+
+        <item android:id="@+id/staff"
+            android:title="Nhân viên"/>
+
+        <item android:id="@+id/customer"
+            android:title="Khách hàng"
+            />
+
+        <item android:id="@+id/receipt"
+            android:title="Hóa đơn"
+            />
+    </group>
+
+    <item android:title="Tài khoản">
+        <menu>
+            <item android:id="@+id/change_password"
+                android:title="Đổi mật khẩu"
+                />
+
+            <item android:id="@+id/log_out"
+                android:title="Đăng xuất"
+                />
+        </menu>
+    </item>
+</menu>

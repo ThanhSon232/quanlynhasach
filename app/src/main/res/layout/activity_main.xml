@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout android:layout_width="match_parent"
+<androidx.drawerlayout.widget.DrawerLayout
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -9,21 +11,20 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <include android:id="@+id/appbar" layout="@layout/appbar"/>
         <FrameLayout
+            android:layout_below="@+id/appbar"
             android:id="@+id/fragment_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/navigation"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            app:itemIconTint="@color/black"
-            app:labelVisibilityMode="unlabeled"
-            app:menu="@menu/bottom_navigation" />
     </RelativeLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:headerLayout="@layout/layout_header_nav"
+        android:layout_gravity="start"
+        app:menu="@menu/menu_nav"
+        />
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -74,6 +74,7 @@ public class loginFragment extends Fragment implements View.OnClickListener{
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         Toast.makeText(getContext(),"Successful",Toast.LENGTH_SHORT).show();
+                        getActivity().finish();
                     }
                     else {
                         Toast.makeText(getContext(),"Authentication error: " + task.getException().getMessage(),Toast.LENGTH_LONG).show();
