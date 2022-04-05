@@ -9,6 +9,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1984375" />
         <entry key="app/src/main/res/layout/appbar.xml" value="0.1259259259259259" />
         <entry key="app/src/main/res/layout/book.xml" value="0.1259259259259259" />
+        <entry key="app/src/main/res/layout/fragment_add_new_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_book.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.22327880859375" />
         <entry key="app/src/main/res/layout/fragment_receipt.xml" value="0.1" />
@@ -31,7 +32,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.22327880859375" />
+        <option name="scale" value="0.2813583374023438" />
       </ProjectState>
     </option>
   </component>
