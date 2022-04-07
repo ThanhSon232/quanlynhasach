@@ -60,6 +60,7 @@ public class addNewItemFragment extends Fragment implements View.OnClickListener
     EditText price;
     EditText quantity;
     String sUrl;
+    bookModel model;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,8 +121,9 @@ public class addNewItemFragment extends Fragment implements View.OnClickListener
                 quantity.requestFocus();
             }
                 else {
+                    uploadPicture();
                     String randomKey = UUID.randomUUID().toString();
-                    bookModel model = new bookModel(randomKey,nameC,typeC,authorC,Integer.valueOf(priceC),Integer.valueOf(quantityC),sUrl);
+                    model = new bookModel(randomKey,nameC,typeC,authorC,Integer.valueOf(priceC),Integer.valueOf(quantityC),sUrl);
                     myRef = database.getReference().child("books/");
                     myRef.child(model.getMaSach()).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -162,18 +164,19 @@ public class addNewItemFragment extends Fragment implements View.OnClickListener
         pd.setTitle("Uploading image...");
         pd.show();
         String randomKey = UUID.randomUUID().toString();
-        Uri file = Uri.fromFile(bundle.getParcelable("data"));
+//        Uri file = Uri.fromFile(bundle.getParcelable("data"));
         StorageReference riversRef = storageReference.child("images/"+randomKey);
 
         riversRef.putFile(bundle.getParcelable("data")).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Snackbar.make(getActivity().findViewById(android.R.id.content),"Image Uploaded",Snackbar.LENGTH_LONG).show();
                 riversRef.getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         final Uri downloadUrl = uri;
                         sUrl = downloadUrl.toString();
+                        myRef = database.getReference().child("books/");
+                        myRef.child(model.getMaSach()+"/hinhAnh").setValue(sUrl);
                     }
                 } ).addOnFailureListener( new OnFailureListener() {
                     @Override
@@ -193,6 +196,9 @@ public class addNewItemFragment extends Fragment implements View.OnClickListener
             @Override
             public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                 double progressPercent = (100.00*snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                if((int)progressPercent == 100){
+                    pd.dismiss();
+                }
                 pd.setMessage("Percentage: "+(int)progressPercent+"%");
             }
         });

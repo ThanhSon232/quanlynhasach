@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quanlynhasach.R;
 import com.example.quanlynhasach.model.bookModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -44,7 +45,7 @@ public class bookAdapter extends RecyclerView.Adapter<bookAdapter.bookViewHolder
         holder.author.setText(books.get(position).getTacGia());
         holder.price.setText(books.get(position).getDonGia().toString());
         holder.quantity.setText(books.get(position).getSoLuongConLai().toString());
-        Picasso
+        Picasso.get().load(books.get(position).getHinhAnh()).into(holder.image);
     }
 
     class bookViewHolder extends RecyclerView.ViewHolder {
@@ -61,7 +62,7 @@ public class bookAdapter extends RecyclerView.Adapter<bookAdapter.bookViewHolder
             author = itemView.findViewById(R.id.author);
             price = itemView.findViewById(R.id.price);
             quantity = itemView.findViewById(R.id.quantity);
-            image = itemView.findViewById(R.id.avatar);
+            image = itemView.findViewById(R.id.picture);
         }
     }
 }
