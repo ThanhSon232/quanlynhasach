@@ -23,52 +23,49 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_alignTop="@+id/card"
-        android:layout_toRightOf="@id/card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/card"
+        android:layout_toRightOf="@id/card"
         android:text="Mã sách - Tên sách"
         android:textColor="@color/black"
+        android:textStyle="bold"
         />
 
 
     <TextView
         android:id="@+id/type"
-        android:layout_below="@id/title"
-        android:layout_toRightOf="@id/card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Thể loại"
-        />
+        android:layout_below="@id/title"
+        android:layout_toRightOf="@id/card"
+        android:text="Thể loại" />
 
     <TextView
         android:id="@+id/author"
-        android:layout_below="@id/type"
-        android:layout_toRightOf="@id/card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tác giả"
-        />
+        android:layout_below="@id/type"
+        android:layout_toRightOf="@id/card"
+        android:text="Tác giả" />
 
     <TextView
         android:id="@+id/price"
-        android:layout_below="@id/author"
-        android:layout_toRightOf="@id/card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Đơn giá"
-        />
+        android:layout_below="@id/author"
+        android:layout_toRightOf="@id/card"
+        android:text="Đơn giá" />
 
 
     <TextView
         android:id="@+id/quantity"
-        android:layout_marginRight="10dp"
-        android:layout_alignBottom="@+id/card"
-        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Số lượng"
-        />
+        android:layout_alignBottom="@+id/card"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:text="Số lượng" />
 
 
 
