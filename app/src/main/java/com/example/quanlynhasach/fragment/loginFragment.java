@@ -36,8 +36,8 @@ public class loginFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        registerButton = view.findViewById(R.id.registerButton);
-        registerButton.setOnClickListener(this);
+        //registerButton = view.findViewById(R.id.registerButton);
+        //registerButton.setOnClickListener(this);
         email = view.findViewById(R.id.emailLogin);
         password = view.findViewById(R.id.password);
         loginButton = view.findViewById(R.id.loginButton);
@@ -52,8 +52,8 @@ public class loginFragment extends Fragment implements View.OnClickListener{
             case R.id.loginButton:
                 authentication();
                 break;
-            case R.id.registerButton:
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_layout,new registerFragment()).addToBackStack("registerFragment").commit();
+            //case R.id.registerButton:
+                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_layout,new registerFragment()).addToBackStack("registerFragment").commit();
         }
     }
 

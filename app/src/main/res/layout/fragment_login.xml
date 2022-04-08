@@ -16,17 +16,16 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/emailLogin"
-        android:layout_marginTop="10dp"
-        android:layout_centerInParent="true"
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:inputType="textEmailAddress"
-        android:hint="email"
-        android:elevation="10dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
         android:background="@drawable/customlogininput"
         android:drawablePadding="10dp"
-        android:paddingLeft="10dp"
-        />
+        android:elevation="10dp"
+        android:hint="email"
+        android:inputType="textEmailAddress"
+        android:paddingLeft="10dp" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/password"
@@ -45,24 +44,24 @@
 
     <Button
         android:id="@+id/loginButton"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_width="242dp"
+        android:layout_height="64dp"
         android:layout_below="@id/password"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="#757474"
         android:text="login"
         android:textColor="@color/white" />
 
-    <Button
-        android:id="@+id/registerButton"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/loginButton"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
-        android:text="register"
-        android:textColor="@color/white" />
+<!--    <Button-->
+<!--        android:id="@+id/registerButton"-->
+<!--        android:layout_width="250dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/loginButton"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        android:text="register"-->
+<!--        android:textColor="@color/white" />-->
 
 
 
