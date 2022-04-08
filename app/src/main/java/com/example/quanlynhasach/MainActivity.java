@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     com.example.quanlynhasach.fragment.staffFragment staffFragment = new staffFragment();
     com.example.quanlynhasach.fragment.receiptFragment receiptFragment = new receiptFragment();
     bookFragment bookFragment = new bookFragment();
+    goodReceivedNoteFragment goodReceivedNoteFragment = new goodReceivedNoteFragment();
     ImageButton option;
 
     TextView email;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager.beginTransaction().add(R.id.fragment_layout, bookFragment, "bookFragment").commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, staffFragment, "staffFragment").hide(staffFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, receiptFragment, "receiptFragment").hide(receiptFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fragment_layout, goodReceivedNoteFragment, "goodReceivedNoteFragment").hide(goodReceivedNoteFragment).commit();
         activeFragment = bookFragment;
     }
 
@@ -93,6 +95,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentManager.beginTransaction().hide(activeFragment).show(bookFragment).commit();
                 activeFragment = receiptFragment;
                 break;
+            case R.id.note:
+                fragmentManager.beginTransaction().hide(activeFragment).show(goodReceivedNoteFragment).commit();
+                activeFragment = goodReceivedNoteFragment;
+                break;
             case R.id.log_out:
                 mAuth.signOut();
                 startActivity(new Intent(this,login_register_fragment.class));
@@ -111,9 +117,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
 
-        if(fragmentManager.findFragmentByTag("addNewItemFragment") == null){
+        if(fragmentManager.findFragmentByTag("addNewBook") == null){
             appbar.setVisibility(View.VISIBLE);
         }
+
+        if(fragmentManager.findFragmentByTag("addNewNote") == null){
+            appbar.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
@@ -146,9 +157,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (requestCode == PICK_IMAGE && data!=null) {
             final Bundle extras = new Bundle();
             extras.putParcelable("data",data.getData());
-            addNewItemFragment item = new addNewItemFragment();
+            addNewBook item = new addNewBook();
             item.setArguments(extras);
-            fragmentManager.beginTransaction().replace(R.id.fragment_layout,item).addToBackStack("addNewItemFragment").commit();
+            fragmentManager.beginTransaction().replace(R.id.fragment_layout,item).addToBackStack("addNewBook").commit();
         }
         else{
             Toast.makeText(this,"Success",Toast.LENGTH_LONG).show();
@@ -186,7 +197,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         reiceved_note.setOnClickListener(v -> {
             dialog.dismiss();
-            setPickImage();
+            fragmentManager.beginTransaction().replace(R.id.fragment_layout,new addNewNote()).addToBackStack("addNewNote").commit();
+            appbar.setVisibility(View.GONE);
         } );
 
         bill.setOnClickListener(v -> {

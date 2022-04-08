@@ -1,16 +1,12 @@
 package com.example.quanlynhasach.fragment;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -18,6 +14,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,11 +24,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.quanlynhasach.R;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -44,7 +38,7 @@ import com.example.quanlynhasach.model.*;
 
 import java.util.UUID;
 
-public class addNewItemFragment extends Fragment implements View.OnClickListener {
+public class addNewBook extends Fragment implements View.OnClickListener {
     Toolbar appbar;
     ImageButton previous;
     ImageButton check;
@@ -61,6 +55,9 @@ public class addNewItemFragment extends Fragment implements View.OnClickListener
     EditText quantity;
     String sUrl;
     bookModel model;
+    EditText bookID;
+    Button random;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +66,7 @@ public class addNewItemFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_new_item, container, false);
+        View view = inflater.inflate(R.layout.add_new_book, container, false);
        appbar = getActivity().findViewById(R.id.appbar);
        appbar.setVisibility(View.GONE);
        previous = view.findViewById(R.id.previous);
@@ -85,6 +82,9 @@ public class addNewItemFragment extends Fragment implements View.OnClickListener
        author = view.findViewById(R.id.author);
        price = view.findViewById(R.id.price);
        quantity = view.findViewById(R.id.quantity);
+       bookID = view.findViewById(R.id.bookID);
+       random = view.findViewById(R.id.random);
+       random.setOnClickListener(this);
        database = FirebaseDatabase.getInstance("https://quanlynhasach-c1a4c-default-rtdb.asia-southeast1.firebasedatabase.app/");
        setAvatar();
         return view;
@@ -94,10 +94,11 @@ public class addNewItemFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.previous:
-                getActivity().getSupportFragmentManager().popBackStack("addNewItemFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getActivity().getSupportFragmentManager().popBackStack("addNewBook", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 appbar.setVisibility(View.VISIBLE);
                 break;
             case R.id.edit_ok:
+                String idC = bookID.getText().toString();
                 String nameC = name.getText().toString();
                 String typeC = type.getText().toString();
                 String authorC = author.getText().toString();
@@ -106,6 +107,10 @@ public class addNewItemFragment extends Fragment implements View.OnClickListener
                 if(TextUtils.isEmpty(nameC)) {
                     name.setError("Name cannot be empty");
                     name.requestFocus();
+                }
+                else if(TextUtils.isEmpty(idC)) {
+                    bookID.setError("Name cannot be empty");
+                    bookID.requestFocus();
                 }
                 else if(TextUtils.isEmpty(typeC)) {
                     type.setError("Type cannot be empty");
@@ -122,14 +127,13 @@ public class addNewItemFragment extends Fragment implements View.OnClickListener
             }
                 else {
                     uploadPicture();
-                    String randomKey = UUID.randomUUID().toString();
-                    model = new bookModel(randomKey,nameC,typeC,authorC,Integer.valueOf(priceC),Integer.valueOf(quantityC),sUrl);
+                    model = new bookModel(idC,nameC,typeC,authorC,Integer.valueOf(priceC),Integer.valueOf(quantityC),sUrl);
                     myRef = database.getReference().child("books/");
                     myRef.child(model.getMaSach()).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(getContext(),"Success",Toast.LENGTH_LONG).show();
-                            getActivity().getSupportFragmentManager().popBackStack("addNewItemFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            getActivity().getSupportFragmentManager().popBackStack("addNewBook", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                             appbar.setVisibility(View.VISIBLE);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -139,6 +143,9 @@ public class addNewItemFragment extends Fragment implements View.OnClickListener
                         }
                     });
                 }
+                break;
+            case R.id.random:
+                bookID.setText(UUID.randomUUID().toString());
                 break;
         }
     }
