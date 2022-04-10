@@ -26,14 +26,21 @@ import android.widget.Toast;
 import com.example.quanlynhasach.R;
 import com.example.quanlynhasach.adapter.bookInNoteAdapter;
 import com.example.quanlynhasach.model.bookModel;
+import com.example.quanlynhasach.model.noteModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 public class addNewNote extends Fragment implements View.OnClickListener{
@@ -126,8 +133,22 @@ public class addNewNote extends Fragment implements View.OnClickListener{
                     Toast.makeText(getContext(),"Lỗi",Toast.LENGTH_LONG).show();
                 }
                 else {
+                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
                     DatabaseReference arrayTicketRef = database.getReference("notes");
-                    arrayTicketRef.child(i).setValue(bookInNoteAdapter.getBooks());
+                    ArrayList<bookModel> bookModelArrayList = new ArrayList<>();
+                    for(bookModel model : bookInNoteAdapter.getBooks()){
+                        bookModel tempModel = new bookModel(model.getMaSach(),null,null,null,null,model.getSoLuongConLai(),null);
+                        bookModelArrayList.add(tempModel);
+                        DatabaseReference updateQuantity = database.getReference("books/"+model.getMaSach()+"/soLuongConLai");
+                        updateQuantity.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                updateQuantity.setValue(Integer.valueOf(task.getResult().getValue().toString())+ tempModel.getSoLuongConLai());
+                            }
+                        });
+                    }
+                    noteModel noteModel = new noteModel(i,timeStamp, bookModelArrayList);
+                    arrayTicketRef.child(noteModel.getNoteID()).setValue(noteModel);
                     getActivity().getSupportFragmentManager().popBackStack("addNewNote", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
                 }
