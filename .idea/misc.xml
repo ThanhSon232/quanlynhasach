@@ -3,29 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/activity_login_register_fragment.xml" value="0.17300724637681159" />
-        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/activity_main.xml" value="0.17300724637681159" />
-        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/add_new_book.xml" value="0.17300724637681159" />
-        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/appbar.xml" value="0.17300724637681159" />
-        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/book.xml" value="0.17300724637681159" />
-        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_add_new_note.xml" value="0.17300724637681159" />
-        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_book.xml" value="0.17300724637681159" />
-        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_book_detail.xml" value="0.17300724637681159" />
-        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_good_received_note.xml" value="0.17300724637681159" />
-        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_login.xml" value="0.17300724637681159" />
-        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_register.xml" value="0.17300724637681159" />
         <entry key="app/src/main/res/drawable-v24/customloginbutton.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/customlogininput.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/custominput.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login_register_fragment.xml" value="0.2125" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1984375" />
         <entry key="app/src/main/res/layout/add_new_book.xml" value="0.2125" />
+        <entry key="app/src/main/res/layout/add_new_customer.xml" value="0.2813583374023438" />
         <entry key="app/src/main/res/layout/appbar.xml" value="0.1259259259259259" />
         <entry key="app/src/main/res/layout/book.xml" value="0.20050659179687502" />
+        <entry key="app/src/main/res/layout/customer.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/customer_dialog.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_add_new_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_add_new_note.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_book.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_book_detail.xml" value="0.14404426615505933" />
+        <entry key="app/src/main/res/layout/fragment_customer.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_good_received_note.xml" value="0.2125" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.22327880859375" />
         <entry key="app/src/main/res/layout/fragment_receipt.xml" value="0.1" />
@@ -36,9 +29,9 @@
         <entry key="app/src/main/res/layout/layout_header_nav.xml" value="0.22327880859375" />
         <entry key="app/src/main/res/layout/note.xml" value="0.2813583374023438" />
         <entry key="app/src/main/res/layout/note_input_dialog.xml" value="0.3110367892976589" />
-        <entry key="app/src/main/res/layout/up_item_fragment.xml" value="0.2411764705882353" />
+        <entry key="app/src/main/res/layout/up_item_fragment.xml" value="0.1" />
         <entry key="app/src/main/res/menu/bottom_navigation.xml" value="0.2125" />
-        <entry key="app/src/main/res/menu/menu_nav.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/menu_nav.xml" value="0.42986907958984377" />
         <entry key="app/src/main/res/menu/navigation.xml" value="1.457142857142857" />
       </map>
     </option>
@@ -52,7 +45,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.2813583374023438" />
+        <option name="scale" value="0.22327880859375" />
       </ProjectState>
     </option>
   </component>

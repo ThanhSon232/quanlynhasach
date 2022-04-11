@@ -2,6 +2,7 @@ package com.example.quanlynhasach;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -13,22 +14,34 @@ import androidx.fragment.app.FragmentManager;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quanlynhasach.fragment.*;
+import com.example.quanlynhasach.model.bookModel;
+import com.example.quanlynhasach.model.customerModel;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     public static final int PICK_IMAGE = 1;
@@ -41,8 +54,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     com.example.quanlynhasach.fragment.staffFragment staffFragment = new staffFragment();
     com.example.quanlynhasach.fragment.receiptFragment receiptFragment = new receiptFragment();
     bookFragment bookFragment = new bookFragment();
+    customerFragment customerFragment = new customerFragment();
     goodReceivedNoteFragment goodReceivedNoteFragment = new goodReceivedNoteFragment();
     ImageButton option;
+    FirebaseDatabase database;
 
     TextView email;
     @Override
@@ -53,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(mAuth.getCurrentUser()==null){
             startActivity(new Intent(this,login_register_fragment.class));
         }
+        database = FirebaseDatabase.getInstance("https://quanlynhasach-c1a4c-default-rtdb.asia-southeast1.firebasedatabase.app/");
         appbar = findViewById(R.id.appbar);
         drawerLayout = findViewById(R.id.drawer_layout);
         setSupportActionBar(appbar);
@@ -73,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager.beginTransaction().add(R.id.fragment_layout, bookFragment, "bookFragment").commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, staffFragment, "staffFragment").hide(staffFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, receiptFragment, "receiptFragment").hide(receiptFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fragment_layout, customerFragment, "customerFragment").hide(customerFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, goodReceivedNoteFragment, "goodReceivedNoteFragment").hide(goodReceivedNoteFragment).commit();
         activeFragment = bookFragment;
     }
@@ -93,12 +110,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.book:
                 fragmentManager.beginTransaction().hide(activeFragment).show(bookFragment).commit();
-                activeFragment = receiptFragment;
+                activeFragment = bookFragment;
                 break;
             case R.id.note:
                 fragmentManager.beginTransaction().hide(activeFragment).show(goodReceivedNoteFragment).commit();
                 activeFragment = goodReceivedNoteFragment;
                 break;
+
+            case R.id.customer:
+                fragmentManager.beginTransaction().hide(activeFragment).show(customerFragment).commit();
+                activeFragment = customerFragment;
+                break;
+
             case R.id.log_out:
                 mAuth.signOut();
                 startActivity(new Intent(this,login_register_fragment.class));
@@ -183,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dialog.show();
 
         LinearLayout add_book = dialog.findViewById(R.id.book_layout);
+        LinearLayout customer = dialog.findViewById(R.id.customer);
         LinearLayout reiceved_note = dialog.findViewById(R.id.received_note);
         LinearLayout bill = dialog.findViewById(R.id.bill);
         LinearLayout receipt = dialog.findViewById(R.id.receipt);
@@ -194,6 +218,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             dialog.dismiss();
             setPickImage();
         } );
+
+
+        customer.setOnClickListener(v -> {
+            addNewCustomer();
+            dialog.dismiss();
+        } );
+
 
         reiceved_note.setOnClickListener(v -> {
             dialog.dismiss();
@@ -236,6 +267,84 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+    }
+
+    void addNewCustomer(){
+        LayoutInflater factory = LayoutInflater.from(this);
+        View deleteDialogView = factory.inflate(R.layout.customer_dialog, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(deleteDialogView);
+        String id_1 = UUID.randomUUID().toString();
+        TextView id = deleteDialogView.findViewById(R.id.customerID);
+        id.setText(id_1);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                        EditText name = deleteDialogView.findViewById(R.id.name);
+                        EditText address = deleteDialogView.findViewById(R.id.address);
+                        EditText phoneNumber = deleteDialogView.findViewById(R.id.phoneNumber);
+                        EditText email = deleteDialogView.findViewById(R.id.email);
+
+                        String nameC = name.getText().toString();
+                        String addressC = address.getText().toString();
+                        String phoneNumberC = phoneNumber.getText().toString();
+                        String emailC = email.getText().toString();
+                        if (TextUtils.isEmpty(nameC)) {
+                            Toast.makeText(getApplicationContext(),"Tên không được để trống",Toast.LENGTH_LONG).show();
+                        } else if (TextUtils.isEmpty(addressC)) {
+                            Toast.makeText(getApplicationContext(),"Địa chỉ không được để trống",Toast.LENGTH_LONG).show();
+                            address.requestFocus();
+                        } else if (TextUtils.isEmpty(phoneNumberC)) {
+                            Toast.makeText(getApplicationContext(),"Số điện thoại không được để trống",Toast.LENGTH_LONG).show();
+                        } else if (TextUtils.isEmpty(emailC)) {
+                            Toast.makeText(getApplicationContext(),"Email không được để trống",Toast.LENGTH_LONG).show();
+                        } else {
+                            customerModel customerModel = new customerModel(id_1, nameC, addressC, phoneNumberC, emailC, 0);
+                            DatabaseReference customerRef = database.getReference();
+                            customerRef.child("customer/" + id_1).setValue(customerModel);
+                            Toast.makeText(getApplicationContext(),"Thành công",Toast.LENGTH_LONG).show();
+                        }
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
 
     }
+
+//    customerModel handle(View s,String id){
+//        EditText name = s.findViewById(R.id.name);
+//        EditText address = s.findViewById(R.id.address);
+//        EditText phoneNumber = s.findViewById(R.id.phoneNumber);
+//        EditText email = s.findViewById(R.id.email);
+//
+//        String nameC = name.getText().toString();
+//        String addressC = address.getText().toString();
+//        String phoneNumberC = phoneNumber.getText().toString();
+//        String emailC = email.getText().toString();
+//
+//
+//        if(TextUtils.isEmpty(nameC)){
+//            name.setError("Tên không được để trống");
+//            name.requestFocus();
+//        } else if(TextUtils.isEmpty(addressC)) {
+//            address.setError("Tên không được để trống");
+//            address.requestFocus();
+//        } else if(TextUtils.isEmpty(phoneNumberC)){
+//            phoneNumber.setError("Tên không được để trống");
+//            phoneNumber.requestFocus();
+//        } else if(TextUtils.isEmpty(emailC)){
+//            email.setError("Tên không được để trống");
+//            email.requestFocus();
+//        }
+//        else
+//        return new customerModel(id,nameC,addressC,phoneNumberC,emailC,0);
+//
+//        return null;
+//    }
 }
