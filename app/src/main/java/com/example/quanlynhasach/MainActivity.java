@@ -32,12 +32,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quanlynhasach.fragment.*;
-import com.example.quanlynhasach.model.bookModel;
 import com.example.quanlynhasach.model.customerModel;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -52,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     com.example.quanlynhasach.fragment.staffFragment staffFragment = new staffFragment();
-    com.example.quanlynhasach.fragment.receiptFragment receiptFragment = new receiptFragment();
+    billFragment billFragment = new billFragment();
     bookFragment bookFragment = new bookFragment();
     customerFragment customerFragment = new customerFragment();
     goodReceivedNoteFragment goodReceivedNoteFragment = new goodReceivedNoteFragment();
@@ -88,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     void setUpNavigation() {
         fragmentManager.beginTransaction().add(R.id.fragment_layout, bookFragment, "bookFragment").commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, staffFragment, "staffFragment").hide(staffFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.fragment_layout, receiptFragment, "receiptFragment").hide(receiptFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fragment_layout, billFragment, "receiptFragment").hide(billFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, customerFragment, "customerFragment").hide(customerFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, goodReceivedNoteFragment, "goodReceivedNoteFragment").hide(goodReceivedNoteFragment).commit();
         activeFragment = bookFragment;
@@ -105,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 activeFragment = staffFragment;
                 break;
             case R.id.receipt:
-                fragmentManager.beginTransaction().hide(activeFragment).show(receiptFragment).commit();
-                activeFragment = receiptFragment;
+                fragmentManager.beginTransaction().hide(activeFragment).show(billFragment).commit();
+                activeFragment = billFragment;
                 break;
             case R.id.book:
                 fragmentManager.beginTransaction().hide(activeFragment).show(bookFragment).commit();
@@ -234,7 +231,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         bill.setOnClickListener(v -> {
             dialog.dismiss();
-            setPickImage();
+            fragmentManager.beginTransaction().replace(R.id.fragment_layout,new addNewBill()).addToBackStack("addNewBill").commit();
+            appbar.setVisibility(View.GONE);
         } );
 
         receipt.setOnClickListener(v -> {
@@ -274,7 +272,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View deleteDialogView = factory.inflate(R.layout.customer_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(deleteDialogView);
-        String id_1 = UUID.randomUUID().toString();
+        String[] m = UUID.randomUUID().toString().split("-");
+        String id_1 = m[0];
         TextView id = deleteDialogView.findViewById(R.id.customerID);
         id.setText(id_1);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -316,35 +315,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             builder.show();
 
     }
-
-//    customerModel handle(View s,String id){
-//        EditText name = s.findViewById(R.id.name);
-//        EditText address = s.findViewById(R.id.address);
-//        EditText phoneNumber = s.findViewById(R.id.phoneNumber);
-//        EditText email = s.findViewById(R.id.email);
-//
-//        String nameC = name.getText().toString();
-//        String addressC = address.getText().toString();
-//        String phoneNumberC = phoneNumber.getText().toString();
-//        String emailC = email.getText().toString();
-//
-//
-//        if(TextUtils.isEmpty(nameC)){
-//            name.setError("Tên không được để trống");
-//            name.requestFocus();
-//        } else if(TextUtils.isEmpty(addressC)) {
-//            address.setError("Tên không được để trống");
-//            address.requestFocus();
-//        } else if(TextUtils.isEmpty(phoneNumberC)){
-//            phoneNumber.setError("Tên không được để trống");
-//            phoneNumber.requestFocus();
-//        } else if(TextUtils.isEmpty(emailC)){
-//            email.setError("Tên không được để trống");
-//            email.requestFocus();
-//        }
-//        else
-//        return new customerModel(id,nameC,addressC,phoneNumberC,emailC,0);
-//
-//        return null;
-//    }
 }
