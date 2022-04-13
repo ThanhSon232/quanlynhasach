@@ -1,9 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.billFragment">
+    tools:context=".fragment.billFragment"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:background="@drawable/borderbackground"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:text="Tìm"
+            android:backgroundTint="@color/Black"
+            android:layout_height="wrap_content"/>
+        <EditText
+
+            android:layout_toLeftOf="@id/searchButton"
+            android:id="@+id/search_bar"
+            android:background="@android:color/transparent"
+            android:layout_toRightOf="@+id/spinner_bill"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="yyyymmdd"/>
+        <Spinner
+            android:id="@+id/spinner_bill"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:entries="@array/spinner_bill"/>
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -11,4 +38,4 @@
         android:layout_height="wrap_content"
         />
 
-</FrameLayout>
+</LinearLayout>

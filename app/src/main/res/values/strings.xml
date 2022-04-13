@@ -6,9 +6,19 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
 
-    <string-array name="spinner">
+    <string-array name="spinner_book">
         <item>Tên</item>
         <item>Mã</item>
+    </string-array>
+
+    <string-array name="spinner_note">
+        <item>Ngày</item>
+        <item>Mã</item>
+    </string-array>
+    <string-array name="spinner_bill">
+        <item>Ngày</item>
+        <item>Mã</item>
+        <item>Tên</item>
     </string-array>
 
 </resources>

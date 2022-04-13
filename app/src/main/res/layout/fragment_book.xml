@@ -29,7 +29,7 @@
             android:id="@+id/spinner_book"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:entries="@array/spinner"/>
+            android:entries="@array/spinner_book"/>
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView

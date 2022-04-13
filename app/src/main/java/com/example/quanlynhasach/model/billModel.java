@@ -29,7 +29,7 @@ public class billModel {
     }
 
     public String getDate() {
-        return date;
+        return date.split("_")[0];
     }
 
     public void setDate(String date) {
