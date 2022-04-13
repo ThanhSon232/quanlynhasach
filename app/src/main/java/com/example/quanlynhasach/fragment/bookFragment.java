@@ -1,21 +1,18 @@
 package com.example.quanlynhasach.fragment;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.quanlynhasach.R;
 import com.example.quanlynhasach.adapter.*;
@@ -27,11 +24,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class bookFragment extends Fragment implements View.OnClickListener {
     bookAdapter bookAdapter;
     RecyclerView recyclerView;
+    Button search;
+    EditText searchBar;
+    Spinner spinner;
+    ArrayList<bookModel> view_books = new ArrayList<>();
     ArrayList<bookModel> books = new ArrayList<>();
     FirebaseDatabase database;
     @Override
@@ -46,7 +48,12 @@ public class bookFragment extends Fragment implements View.OnClickListener {
         database = FirebaseDatabase.getInstance("https://quanlynhasach-c1a4c-default-rtdb.asia-southeast1.firebasedatabase.app/");
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
-        bookAdapter = new bookAdapter(books,getContext());
+        bookAdapter = new bookAdapter(view_books,getContext());
+        search = view.findViewById(R.id.searchButton);
+        search.setOnClickListener(this);
+        searchBar = view.findViewById(R.id.search_bar);
+        spinner = view.findViewById(R.id.spinner_book);
+        searchBar.setOnClickListener(this);
         recyclerView.setAdapter(bookAdapter);
         getData();
         return view;
@@ -57,8 +64,10 @@ public class bookFragment extends Fragment implements View.OnClickListener {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                view_books.clear();
                 books.clear();
                 for(DataSnapshot data : snapshot.getChildren()){
+                    view_books.add(data.getValue(bookModel.class));
                     books.add(data.getValue(bookModel.class));
                 }
                 bookAdapter.notifyDataSetChanged();
@@ -73,5 +82,31 @@ public class bookFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.searchButton:
+                if(spinner.getSelectedItem().toString().equals("Tên")){
+                    String key = searchBar.getText().toString();
+                    view_books.clear();
+                    for (bookModel b:books){
+                        if(b.getTenSach().toLowerCase().contains(key.toLowerCase())){
+                            view_books.add(b);
+                        }
+                    }
+                    bookAdapter.notifyDataSetChanged();
+                }
+                if(spinner.getSelectedItem().toString().equals("Mã")){
+                    String key = searchBar.getText().toString();
+                    view_books.clear();
+                    for (bookModel b:books){
+                        if(b.getMaSach().toLowerCase().contains(key.toLowerCase())){
+                            view_books.add(b);
+                        }
+                    }
+                    bookAdapter.notifyDataSetChanged();
+                }
+
+
+        }
+
     }
 }

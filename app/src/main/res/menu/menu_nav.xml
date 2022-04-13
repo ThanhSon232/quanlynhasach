@@ -17,8 +17,13 @@
 
     <item android:title="Báo cáo">
         <menu>
-            <item android:id="@+id/report"
-                android:title="Báo cáo"
+            <item android:id="@+id/report1"
+                android:title="Báo cáo tồn sách"
+
+                />
+            <item android:id="@+id/report2"
+
+                android:title="Báo cáo công nợ"
                 />
         </menu>
     </item>

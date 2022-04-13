@@ -6,4 +6,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
 
+    <string-array name="spinner">
+        <item>Tên</item>
+        <item>Mã</item>
+    </string-array>
+
 </resources>
