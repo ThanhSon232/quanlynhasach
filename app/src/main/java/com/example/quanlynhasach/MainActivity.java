@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     goodReceivedNoteFragment goodReceivedNoteFragment = new goodReceivedNoteFragment();
     ImageButton option;
     FirebaseDatabase database;
+    ruleFragment ruleFragment = new ruleFragment();
 
     TextView email;
     @Override
@@ -85,9 +86,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     void setUpNavigation() {
         fragmentManager.beginTransaction().add(R.id.fragment_layout, bookFragment, "bookFragment").commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, staffFragment, "staffFragment").hide(staffFragment).commit();
-        fragmentManager.beginTransaction().add(R.id.fragment_layout, billFragment, "receiptFragment").hide(billFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fragment_layout, billFragment, "billFragment").hide(billFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, customerFragment, "customerFragment").hide(customerFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, goodReceivedNoteFragment, "goodReceivedNoteFragment").hide(goodReceivedNoteFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fragment_layout, ruleFragment, "ruleFragment").hide(ruleFragment).commit();
         activeFragment = bookFragment;
     }
 
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentManager.beginTransaction().hide(activeFragment).show(staffFragment).commit();
                 activeFragment = staffFragment;
                 break;
-            case R.id.receipt:
+            case R.id.bill:
                 fragmentManager.beginTransaction().hide(activeFragment).show(billFragment).commit();
                 activeFragment = billFragment;
                 break;
@@ -122,6 +124,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.log_out:
                 mAuth.signOut();
                 startActivity(new Intent(this,login_register_fragment.class));
+                break;
+            case R.id.rule:
+                fragmentManager.beginTransaction().hide(activeFragment).show(ruleFragment).commit();
+                activeFragment = ruleFragment;
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

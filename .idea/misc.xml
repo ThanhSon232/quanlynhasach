@@ -36,6 +36,7 @@
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.22327880859375" />
         <entry key="app/src/main/res/layout/fragment_receipt.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.1984375" />
+        <entry key="app/src/main/res/layout/fragment_rule.xml" value="0.2125" />
         <entry key="app/src/main/res/layout/fragment_staff.xml" value="0.1" />
         <entry key="app/src/main/res/layout/good_received_note.xml" value="0.2125" />
         <entry key="app/src/main/res/layout/input_dialog.xml" value="0.1" />

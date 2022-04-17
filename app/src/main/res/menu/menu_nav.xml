@@ -7,7 +7,7 @@
                 <item android:id="@+id/book" android:title="Sách"/>
                 <item android:id="@+id/customer" android:title="Khách hàng"/>
                 <item android:id="@+id/note" android:title="Phiếu nhập sách"/>
-                <item android:id="@+id/receipt" android:title="Hóa đơn bán sách"/>
+                <item android:id="@+id/bill" android:title="Hóa đơn bán sách"/>
                 <item android:title="Phiếu thu"/>
                 <item android:id="@+id/rule"
                     android:title="Quy định"
