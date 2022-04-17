@@ -25,18 +25,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quanlynhasach.fragment.*;
 import com.example.quanlynhasach.model.customerModel;
+import com.example.quanlynhasach.model.receiptModel;
+import com.example.quanlynhasach.model.ruleModel;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.w3c.dom.Text;
 
 import java.util.UUID;
 
@@ -52,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     billFragment billFragment = new billFragment();
     bookFragment bookFragment = new bookFragment();
     customerFragment customerFragment = new customerFragment();
+    receiptFragment receiptFragment = new receiptFragment();
     goodReceivedNoteFragment goodReceivedNoteFragment = new goodReceivedNoteFragment();
     ImageButton option;
     FirebaseDatabase database;
@@ -119,6 +128,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.customer:
                 fragmentManager.beginTransaction().hide(activeFragment).show(customerFragment).commit();
                 activeFragment = customerFragment;
+                break;
+
+            case R.id.receipt:
+                fragmentManager.beginTransaction().hide(activeFragment).show(receiptFragment).commit();
+                activeFragment = receiptFragment;
                 break;
 
             case R.id.log_out:
@@ -243,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         receipt.setOnClickListener(v -> {
             dialog.dismiss();
-            setPickImage();
+            addNewReceipt();
         } );
 
         rule.setOnClickListener(v -> {
@@ -319,6 +333,122 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
 
             builder.show();
+
+    }
+
+    void addNewReceipt(){
+        LayoutInflater factory = LayoutInflater.from(this);
+        View deleteDialogView = factory.inflate(R.layout.bill_input_dialog, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(deleteDialogView);
+        EditText id = deleteDialogView.findViewById(R.id.customerID);
+        String[] m = UUID.randomUUID().toString().split("-");
+        String id_1 = m[0];
+        Switch switch4 = deleteDialogView.findViewById(R.id.switch4);
+        switch4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                DatabaseReference myRef = database.getReference().child("rules");
+                if(b) {
+                    myRef.child("switch3").setValue(true);
+                }
+                else {
+                    myRef.child("switch3").setValue(false);
+                }
+            }
+        });
+        deleteDialogView.findViewById(R.id.find).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handle(deleteDialogView,id.getText().toString());
+
+            }
+        });
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                TextView name = deleteDialogView.findViewById(R.id.name);
+                String nameC = name.getText().toString();
+                EditText money = deleteDialogView.findViewById(R.id.money);
+                String moneyC = money.getText().toString();
+                TextView date = deleteDialogView.findViewById(R.id.date);
+                DatabaseReference rule = database.getReference().child("rules");
+                rule.child("switch3").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    @Override
+                    public void onSuccess(DataSnapshot dataSnapshot) {
+                        switch4.setChecked((Boolean) dataSnapshot.getValue());
+                    }
+                });
+                DatabaseReference receipt = database.getReference().child("receipt/"+id.getText().toString());
+                if(TextUtils.isEmpty(nameC)){
+                    Toast.makeText(getApplicationContext(),"Không tìm thấy ID",Toast.LENGTH_LONG).show();
+                }
+                else if(TextUtils.isEmpty(moneyC)){
+                    Toast.makeText(getApplicationContext(),"Phải nhập tiền",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    if(switch4.isChecked()){
+                        DatabaseReference customer = database.getReference().child("customer/"+id.getText().toString());
+                        customer.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                            @Override
+                            public void onSuccess(DataSnapshot dataSnapshot) {
+                                Integer debt = Integer.valueOf(dataSnapshot.child("debt").getValue().toString());
+                                if(Integer.valueOf(moneyC) > debt){
+                                    Toast.makeText(getApplicationContext(),"Số tiền thu không được quá số tiền nợ",Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    customer.child("debt").setValue(debt - Integer.valueOf(moneyC));
+                                    receiptModel receiptModel = new receiptModel(id_1,date.getText().toString(),Integer.valueOf(moneyC));
+                                    receipt.child(receiptModel.getMaPhieuThu()).setValue(receiptModel);
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        receiptModel receiptModel = new receiptModel(id_1,date.getText().toString(),Integer.valueOf(moneyC));
+                        receipt.child(receiptModel.getMaPhieuThu()).setValue(receiptModel);
+                    }
+                }
+
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    void handle(View deleteDialogView, String id){
+        TextView name = deleteDialogView.findViewById(R.id.name);
+        TextView address = deleteDialogView.findViewById(R.id.address);
+        TextView phoneNumber = deleteDialogView.findViewById(R.id.phoneNumber);
+        TextView email = deleteDialogView.findViewById(R.id.email);
+        TextView date = deleteDialogView.findViewById(R.id.date);
+
+        DatabaseReference customer = database.getReference().child("customer/"+id);
+        customer.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    customerModel customerModel = dataSnapshot.getValue(customerModel.class);
+                    name.setText(customerModel.getName());
+                    address.setText(customerModel.getAddress());
+                    email.setText(customerModel.getEmail());
+                    phoneNumber.setText(customerModel.getPhoneNumber());
+                    long millis = System.currentTimeMillis();
+                    java.sql.Date date_1 = new java.sql.Date(millis);
+                    date.setText(date_1 + "");
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),"Khong tìm thấy ID",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
     }
 }
