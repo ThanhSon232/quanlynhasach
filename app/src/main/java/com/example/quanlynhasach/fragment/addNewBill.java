@@ -52,6 +52,7 @@ public class addNewBill extends Fragment implements View.OnClickListener{
     TextView date;
     EditText customerID;
     Button find;
+    ImageButton previous;
 
     Button add;
     ImageButton check;
@@ -68,6 +69,14 @@ public class addNewBill extends Fragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.add_new_bill, container, false);
         database = FirebaseDatabase.getInstance("https://quanlynhasach-c1a4c-default-rtdb.asia-southeast1.firebasedatabase.app/");
         id = view.findViewById(R.id.id);
+        previous = view.findViewById(R.id.previous);
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().popBackStack("addNewBill", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
+            }
+        });
         date = view.findViewById(R.id.date);
         customerID = view.findViewById(R.id.customerID);
         find = view.findViewById(R.id.find);
@@ -93,7 +102,7 @@ public class addNewBill extends Fragment implements View.OnClickListener{
 
     }
 
-
+    private Integer inStock = 0;
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -142,46 +151,37 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setView(deleteDialogView);
                 handle(deleteDialogView);
-                EditText quantity = deleteDialogView.findViewById(R.id.receivedQuantity);
-                quantity.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-
-                    }
-                });
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         TextView name = deleteDialogView.findViewById(R.id.name);
                         String i = name.getText().toString();
                         EditText id = deleteDialogView.findViewById(R.id.bookID);
                         EditText quantity = deleteDialogView.findViewById(R.id.receivedQuantity);
-                        if(TextUtils.isEmpty(i)){
-                            Toast.makeText(getContext(),"Lỗi",Toast.LENGTH_LONG).show();
+
+                        if(inStock - Integer.parseInt((quantity.getText().toString()))<=_rule.getLuongTonToiThieuBan()&&_rule.isSwitch2()){
+                            Toast.makeText(getContext(),"Số sách tồn lại phải > "+_rule.getLuongTonToiThieuBan(),Toast.LENGTH_LONG).show();
+                        }else{
+                            if(TextUtils.isEmpty(i)){
+                                Toast.makeText(getContext(),"Lỗi",Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                DatabaseReference myRef = database.getReference().child("books/" + id.getText().toString());
+                                myRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DataSnapshot dataSnapshot) {
+                                        bookModel bookModel = dataSnapshot.getValue(com.example.quanlynhasach.model.bookModel.class);
+                                        bookModel.setSoLuongConLai(Integer.valueOf(quantity.getText().toString()));
+                                        bookModelArrayList.add(bookModel);
+                                        bookInNoteAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
                         }
-                        else{
-                            DatabaseReference myRef = database.getReference().child("books/" + id.getText().toString());
-                            myRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                                @Override
-                                public void onSuccess(DataSnapshot dataSnapshot) {
-                                    bookModel bookModel = dataSnapshot.getValue(com.example.quanlynhasach.model.bookModel.class);
-                                    bookModel.setSoLuongConLai(Integer.valueOf(quantity.getText().toString()));
-                                    bookModelArrayList.add(bookModel);
-                                    bookInNoteAdapter.notifyDataSetChanged();
-                                }
-                            });
-                        }
+
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -190,8 +190,8 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                         dialog.cancel();
                     }
                 });
-
                 builder.show();
+
                 break;
             case R.id.edit_ok:
                 String i = customerName.getText().toString();
@@ -247,6 +247,8 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                                 name.setText(bookModel.getTenSach());
                                 author.setText(bookModel.getTacGia());
                                 quantity.setText(bookModel.getSoLuongConLai().toString());
+                                inStock = bookModel.getSoLuongConLai();
+                                System.out.println(inStock);
                             }
                             else {
                                 Toast.makeText(getContext(),"Không tìm thấy",Toast.LENGTH_LONG).show();

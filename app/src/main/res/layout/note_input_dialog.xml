@@ -36,13 +36,13 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <Button
-                    android:layout_alignParentRight="true"
                     android:id="@+id/find"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="tìm"
-                    />
+                    android:layout_alignParentRight="true"
+                    android:text="tìm" />
 
                 <EditText
                     android:layout_toLeftOf="@id/find"
