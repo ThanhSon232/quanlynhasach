@@ -133,6 +133,7 @@
                 android:text="Số lượng: "
                 android:textColor="@color/black"
                 />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -149,7 +150,16 @@
             </RelativeLayout>
         </LinearLayout>
 
-
+        <TextView
+            android:id="@+id/caution"
+            android:layout_marginLeft="10dp"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vượt quá lượng tồn cho phép"
+            android:textColor="@color/red"
+            android:visibility="invisible"
+            />
 
     </LinearLayout>
 

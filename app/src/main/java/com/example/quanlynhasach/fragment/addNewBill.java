@@ -10,7 +10,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +30,16 @@ import com.example.quanlynhasach.adapter.noteAdapter;
 import com.example.quanlynhasach.model.billModel;
 import com.example.quanlynhasach.model.bookModel;
 import com.example.quanlynhasach.model.noteModel;
+import com.example.quanlynhasach.model.ruleModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -47,11 +52,13 @@ public class addNewBill extends Fragment implements View.OnClickListener{
     TextView date;
     EditText customerID;
     Button find;
+
     Button add;
     ImageButton check;
     RecyclerView recyclerView;
     TextView customerName;
     LinearLayout name;
+    ruleModel _rule;
     ArrayList<bookModel> bookModelArrayList = new ArrayList<>();
     com.example.quanlynhasach.adapter.bookInNoteAdapter bookInNoteAdapter;
     FirebaseDatabase database;
@@ -113,12 +120,47 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                 }
                 break;
             case R.id.add:
+                DatabaseReference rule = database.getReference().child("rule");
+
+
+                rule.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        _rule = snapshot.getValue(ruleModel.class);
+                        System.out.println(_rule.getLuongTonToiThieuBan());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
                 LayoutInflater factory = LayoutInflater.from(getContext());
                 View deleteDialogView = factory.inflate(R.layout.note_input_dialog, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setView(deleteDialogView);
                 handle(deleteDialogView);
+                EditText quantity = deleteDialogView.findViewById(R.id.receivedQuantity);
+                quantity.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         TextView name = deleteDialogView.findViewById(R.id.name);
