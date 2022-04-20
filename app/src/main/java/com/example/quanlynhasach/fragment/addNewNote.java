@@ -5,13 +5,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.text.TextUtilsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,20 +24,19 @@ import com.example.quanlynhasach.R;
 import com.example.quanlynhasach.adapter.bookInNoteAdapter;
 import com.example.quanlynhasach.model.bookModel;
 import com.example.quanlynhasach.model.noteModel;
+import com.example.quanlynhasach.model.ruleModel;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.UUID;
 
 public class addNewNote extends Fragment implements View.OnClickListener{
@@ -53,7 +49,8 @@ public class addNewNote extends Fragment implements View.OnClickListener{
     bookInNoteAdapter bookInNoteAdapter;
     RecyclerView recyclerView;
     ImageButton check;
-
+    ruleModel _rule;
+    Integer inStock;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,6 +86,21 @@ public class addNewNote extends Fragment implements View.OnClickListener{
                 noteID.setText(UUID.randomUUID().toString());
                 break;
             case R.id.add:
+                DatabaseReference rule = database.getReference().child("rule");
+
+
+                rule.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        _rule = snapshot.getValue(ruleModel.class);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
                 LayoutInflater factory = LayoutInflater.from(getContext());
                 View deleteDialogView = factory.inflate(R.layout.note_input_dialog, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -105,16 +117,23 @@ public class addNewNote extends Fragment implements View.OnClickListener{
                             Toast.makeText(getContext(),"Lỗi",Toast.LENGTH_LONG).show();
                         }
                         else{
-                            DatabaseReference myRef = database.getReference().child("books/" + id.getText().toString());
-                            myRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                                @Override
-                                public void onSuccess(DataSnapshot dataSnapshot) {
-                                    bookModel bookModel = dataSnapshot.getValue(com.example.quanlynhasach.model.bookModel.class);
-                                    bookModel.setSoLuongConLai(Integer.valueOf(quantity.getText().toString()));
-                                    bookModelArrayList.add(bookModel);
-                                    bookInNoteAdapter.notifyDataSetChanged();
-                                }
-                            });
+                            if(Integer.parseInt((quantity.getText().toString()))>_rule.getLuongNhapToiThieu()&&_rule.isSwitch1()){
+                                Toast.makeText(getContext(),"Vượt quá số lượng qui định",Toast.LENGTH_LONG).show();
+                            }else if (inStock >=200&&_rule.isSwitch1()){
+                                Toast.makeText(getContext(),"Sách còn tồn nhiều",Toast.LENGTH_LONG).show();
+                            }else{
+                                DatabaseReference myRef = database.getReference().child("books/" + id.getText().toString());
+                                myRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DataSnapshot dataSnapshot) {
+                                        bookModel bookModel = dataSnapshot.getValue(com.example.quanlynhasach.model.bookModel.class);
+                                        bookModel.setSoLuongConLai(Integer.valueOf(quantity.getText().toString()));
+                                        bookModelArrayList.add(bookModel);
+                                        bookInNoteAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
+
                         }
                     }
                 });
@@ -181,6 +200,7 @@ public class addNewNote extends Fragment implements View.OnClickListener{
                                 name.setText(bookModel.getTenSach());
                                 author.setText(bookModel.getTacGia());
                                 quantity.setText(bookModel.getSoLuongConLai().toString());
+                                inStock = bookModel.getSoLuongConLai();
                             }
                             else {
                                 Toast.makeText(getContext(),"Không tìm thấy",Toast.LENGTH_LONG).show();

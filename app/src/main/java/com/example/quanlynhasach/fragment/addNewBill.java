@@ -136,7 +136,6 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         _rule = snapshot.getValue(ruleModel.class);
-                        System.out.println(_rule.getLuongTonToiThieuBan());
                     }
 
                     @Override
@@ -161,14 +160,13 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                         String i = name.getText().toString();
                         EditText id = deleteDialogView.findViewById(R.id.bookID);
                         EditText quantity = deleteDialogView.findViewById(R.id.receivedQuantity);
-
-                        if(inStock - Integer.parseInt((quantity.getText().toString()))<=_rule.getLuongTonToiThieuBan()&&_rule.isSwitch2()){
-                            Toast.makeText(getContext(),"Số sách tồn lại phải > "+_rule.getLuongTonToiThieuBan(),Toast.LENGTH_LONG).show();
+                        if(TextUtils.isEmpty(i)){
+                            Toast.makeText(getContext(),"Lỗi",Toast.LENGTH_LONG).show();
                         }else{
-                            if(TextUtils.isEmpty(i)){
-                                Toast.makeText(getContext(),"Lỗi",Toast.LENGTH_LONG).show();
-                            }
-                            else{
+                            if(inStock - Integer.parseInt((quantity.getText().toString()))<=_rule.getLuongTonToiThieuBan()&&_rule.isSwitch2()){
+                                Toast.makeText(getContext(),"Số sách tồn lại phải > "+_rule.getLuongTonToiThieuBan(),Toast.LENGTH_LONG).show();
+                            }else{
+
                                 DatabaseReference myRef = database.getReference().child("books/" + id.getText().toString());
                                 myRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                     @Override
@@ -179,8 +177,10 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                                         bookInNoteAdapter.notifyDataSetChanged();
                                     }
                                 });
+
                             }
                         }
+
 
                     }
                 });
@@ -248,7 +248,7 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                                 author.setText(bookModel.getTacGia());
                                 quantity.setText(bookModel.getSoLuongConLai().toString());
                                 inStock = bookModel.getSoLuongConLai();
-                                System.out.println(inStock);
+
                             }
                             else {
                                 Toast.makeText(getContext(),"Không tìm thấy",Toast.LENGTH_LONG).show();
