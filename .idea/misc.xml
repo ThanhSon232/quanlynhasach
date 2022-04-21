@@ -31,7 +31,7 @@
         <entry key="app/src/main/res/layout/customer_dialog.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_add_new_bill.xml" value="0.2125" />
         <entry key="app/src/main/res/layout/fragment_add_new_item.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_add_new_note.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_add_new_note.xml" value="0.16500701904296872" />
         <entry key="app/src/main/res/layout/fragment_book.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_book_detail.xml" value="0.14404426615505933" />
         <entry key="app/src/main/res/layout/fragment_customer.xml" value="0.1" />

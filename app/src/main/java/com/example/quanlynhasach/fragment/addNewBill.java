@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +30,9 @@ import com.example.quanlynhasach.adapter.bookInNoteAdapter;
 import com.example.quanlynhasach.adapter.noteAdapter;
 import com.example.quanlynhasach.model.billModel;
 import com.example.quanlynhasach.model.bookModel;
+import com.example.quanlynhasach.model.customerModel;
 import com.example.quanlynhasach.model.noteModel;
+import com.example.quanlynhasach.model.receiptModel;
 import com.example.quanlynhasach.model.ruleModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -53,7 +56,7 @@ public class addNewBill extends Fragment implements View.OnClickListener{
     EditText customerID;
     Button find;
     ImageButton previous;
-
+    Integer debt = 0;
     Button add;
     ImageButton check;
     RecyclerView recyclerView;
@@ -199,28 +202,165 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                     Toast.makeText(getContext(),"Lỗi",Toast.LENGTH_LONG).show();
                 }
                 else {
-//                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-                    DatabaseReference arrayTicketRef = database.getReference("bills");
-                    ArrayList<bookModel> bookModelArrayList = new ArrayList<>();
-                    for(bookModel model : bookInNoteAdapter.getBooks()){
-                        bookModel tempModel = new bookModel(model.getMaSach(),null,null,null,null,model.getSoLuongConLai(),null);
-                        bookModelArrayList.add(tempModel);
-                        DatabaseReference updateQuantity = database.getReference("books/"+model.getMaSach()+"/soLuongConLai");
-                        updateQuantity.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                updateQuantity.setValue(Integer.valueOf(task.getResult().getValue().toString())- tempModel.getSoLuongConLai());
-                            }
-                        });
-                    }
-                    billModel bill = new billModel(id.getText().toString(),date.getText().toString(),customerName.getText().toString(),customerID.getText().toString(), bookModelArrayList);
-                    arrayTicketRef.child(bill.getId()).setValue(bill);
-                    getActivity().getSupportFragmentManager().popBackStack("addNewBill", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                    builder1.setTitle("Thanh toán hay ghi nợ?");
+                    builder1.setItems(new CharSequence[]
+                                    {"Thanh toán", "Ghi nợ", "Hủy"},
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // The 'which' argument contains the index position
+                                    // of the selected item
+                                    switch (which) {
+                                        case 0:
+                                            DatabaseReference arrayTicketRef = database.getReference("bills");
+                                            ArrayList<bookModel> bookModelArrayList = new ArrayList<>();
+                                            for(bookModel model : bookInNoteAdapter.getBooks()){
+                                                bookModel tempModel = new bookModel(model.getMaSach(),null,null,null,null,model.getSoLuongConLai(),null);
+                                                bookModelArrayList.add(tempModel);
+                                                debt += model.getDonGia()*model.getSoLuongConLai();
+                                                DatabaseReference updateQuantity = database.getReference("books/"+model.getMaSach()+"/soLuongConLai");
+                                                updateQuantity.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                        updateQuantity.setValue(Integer.valueOf(task.getResult().getValue().toString())- tempModel.getSoLuongConLai());
+                                                    }
+                                                });
+                                            }
+                                            billModel bill = new billModel(id.getText().toString(),date.getText().toString(),customerName.getText().toString(),customerID.getText().toString(), bookModelArrayList);
+                                            arrayTicketRef.child(bill.getId()).setValue(bill);
+                                            addNewReceipt();
+                                            break;
+                                        case 1:
+                                            String ID_1 = customerID.getText().toString();
+                                            DatabaseReference arrayTicketRef1 = database.getReference("bills");
+                                            DatabaseReference updateDebt = database.getReference("customer/"+ID_1);
+                                            ArrayList<bookModel> bookModelArrayList1 = new ArrayList<>();
+                                            for(bookModel model : bookInNoteAdapter.getBooks()){
+                                                bookModel tempModel = new bookModel(model.getMaSach(),null,null,null,null,model.getSoLuongConLai(),null);
+                                                bookModelArrayList1.add(tempModel);
+                                                debt += model.getDonGia()*model.getSoLuongConLai();
+                                                DatabaseReference updateQuantity = database.getReference("books/"+model.getMaSach()+"/soLuongConLai");
+                                                updateQuantity.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                        updateQuantity.setValue(Integer.valueOf(task.getResult().getValue().toString())- tempModel.getSoLuongConLai());
+                                                    }
+                                                });
+                                            }
+                                            updateDebt.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                                @Override
+                                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                                    updateDebt.child("debt").setValue(Integer.valueOf(dataSnapshot.child("debt").getValue().toString()) + debt);
+                                                }
+                                            });
+                                            billModel bill1 = new billModel(id.getText().toString(),date.getText().toString(),customerName.getText().toString(),customerID.getText().toString(), bookModelArrayList1);
+                                            arrayTicketRef1.child(bill1.getId()).setValue(bill1);
+                                            getActivity().getSupportFragmentManager().popBackStack("addNewBill", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                            getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
+                                            break;
+                                        case 2:
+                                            getActivity().getSupportFragmentManager().popBackStack("addNewBill", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                            getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
+                                            break;
+
+                                    }
+                                }
+                            });
+                    builder1.create().show();
+
                 }
                 break;
         }
     }
+
+    void addNewReceipt(){
+        LayoutInflater factory = LayoutInflater.from(getContext());
+        View deleteDialogView = factory.inflate(R.layout.bill_input_dialog, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(deleteDialogView);
+        EditText id = deleteDialogView.findViewById(R.id.customerID);
+        id.setText(customerID.getText() + "");
+        Button find = deleteDialogView.findViewById(R.id.find);
+        find.setVisibility(View.GONE);
+        String[] m = UUID.randomUUID().toString().split("-");
+        String id_1 = m[0];
+        Switch switch4 = deleteDialogView.findViewById(R.id.switch4);
+        switch4.setVisibility(View.GONE);
+        handle(deleteDialogView,customerID.getText().toString());
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                TextView name = deleteDialogView.findViewById(R.id.name);
+                String nameC = name.getText().toString();
+                EditText money = deleteDialogView.findViewById(R.id.money);
+                String moneyC = money.getText().toString();
+                TextView date = deleteDialogView.findViewById(R.id.date);
+                DatabaseReference receipt = database.getReference().child("receipt/"+id.getText().toString());
+                if(TextUtils.isEmpty(nameC)){
+                    Toast.makeText(getContext(),"Không tìm thấy ID",Toast.LENGTH_LONG).show();
+                }
+                else if(TextUtils.isEmpty(moneyC)){
+                    Toast.makeText(getContext(),"Phải nhập tiền",Toast.LENGTH_LONG).show();
+                }
+                else {
+                        DatabaseReference customer = database.getReference().child("customer/"+customerID.getText().toString());
+                        customer.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                            @Override
+                            public void onSuccess(DataSnapshot dataSnapshot) {
+                                Integer debt = Integer.valueOf(dataSnapshot.child("debt").getValue().toString());
+                                if(Integer.valueOf(moneyC) > debt){
+                                    Toast.makeText(getContext(),"Số tiền thu không được quá số tiền nợ",Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    customer.child("debt").setValue(debt - Integer.valueOf(moneyC));
+                                    receiptModel receiptModel = new receiptModel(id_1,date.getText().toString(),Integer.valueOf(moneyC));
+                                    receipt.child(receiptModel.getMaPhieuThu()).setValue(receiptModel);
+                                    getActivity().getSupportFragmentManager().popBackStack("addNewBill", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                    getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
+                                }
+                            }
+                        });
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
+
+    void handle(View deleteDialogView, String id){
+        TextView name = deleteDialogView.findViewById(R.id.name);
+        TextView address = deleteDialogView.findViewById(R.id.address);
+        TextView phoneNumber = deleteDialogView.findViewById(R.id.phoneNumber);
+        TextView email = deleteDialogView.findViewById(R.id.email);
+        TextView date = deleteDialogView.findViewById(R.id.date);
+
+        DatabaseReference customer = database.getReference().child("customer/"+id);
+        customer.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    customerModel customerModel = dataSnapshot.getValue(customerModel.class);
+                    name.setText(customerModel.getName());
+                    address.setText(customerModel.getAddress());
+                    email.setText(customerModel.getEmail());
+                    phoneNumber.setText(customerModel.getPhoneNumber());
+                    long millis = System.currentTimeMillis();
+                    java.sql.Date date_1 = new java.sql.Date(millis);
+                    date.setText(date_1 + "");
+                }
+                else {
+                    Toast.makeText(getContext(),"Khong tìm thấy ID",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+    }
+
 
     void handle(View s){
         EditText bookID = s.findViewById(R.id.bookID);

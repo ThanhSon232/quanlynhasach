@@ -7,7 +7,6 @@ public class ruleModel {
     static Integer LuongTonToiThieuBan = 20;
     static boolean switch1 = false;
     static boolean switch2 = false;
-    static boolean switch3 = false;
 
 
     public ruleModel() {
@@ -59,13 +58,5 @@ public class ruleModel {
 
     public static void setSwitch2(boolean switch2) {
         ruleModel.switch2 = switch2;
-    }
-
-    public static boolean isSwitch3() {
-        return switch3;
-    }
-
-    public static void setSwitch3(boolean switch3) {
-        ruleModel.switch3 = switch3;
     }
 }

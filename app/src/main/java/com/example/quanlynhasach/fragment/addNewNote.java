@@ -100,7 +100,6 @@ public class addNewNote extends Fragment implements View.OnClickListener{
 
                     }
                 });
-
                 LayoutInflater factory = LayoutInflater.from(getContext());
                 View deleteDialogView = factory.inflate(R.layout.note_input_dialog, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -168,8 +167,9 @@ public class addNewNote extends Fragment implements View.OnClickListener{
                     }
                     noteModel noteModel = new noteModel(i,timeStamp, bookModelArrayList);
                     arrayTicketRef.child(noteModel.getNoteID()).setValue(noteModel);
-                    getActivity().getSupportFragmentManager().popBackStack("addNewNote", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
+//                    getActivity().getSupportFragmentManager().popBackStack("addNewNote", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                    getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
+
                 }
                 break;
         }

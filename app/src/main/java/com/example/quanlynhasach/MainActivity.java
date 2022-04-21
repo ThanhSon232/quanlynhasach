@@ -345,18 +345,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String[] m = UUID.randomUUID().toString().split("-");
         String id_1 = m[0];
         Switch switch4 = deleteDialogView.findViewById(R.id.switch4);
-        switch4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                DatabaseReference myRef = database.getReference().child("rules");
-                if(b) {
-                    myRef.child("switch3").setValue(true);
-                }
-                else {
-                    myRef.child("switch3").setValue(false);
-                }
-            }
-        });
+        switch4.setVisibility(View.GONE);
         deleteDialogView.findViewById(R.id.find).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -372,13 +361,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 EditText money = deleteDialogView.findViewById(R.id.money);
                 String moneyC = money.getText().toString();
                 TextView date = deleteDialogView.findViewById(R.id.date);
-                DatabaseReference rule = database.getReference().child("rules");
-                rule.child("switch3").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                    @Override
-                    public void onSuccess(DataSnapshot dataSnapshot) {
-                        switch4.setChecked((Boolean) dataSnapshot.getValue());
-                    }
-                });
                 DatabaseReference receipt = database.getReference().child("receipt/"+id.getText().toString());
                 if(TextUtils.isEmpty(nameC)){
                     Toast.makeText(getApplicationContext(),"Không tìm thấy ID",Toast.LENGTH_LONG).show();
@@ -387,14 +369,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(getApplicationContext(),"Phải nhập tiền",Toast.LENGTH_LONG).show();
                 }
                 else {
-                    if(switch4.isChecked()){
                         DatabaseReference customer = database.getReference().child("customer/"+id.getText().toString());
                         customer.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                             @Override
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 Integer debt = Integer.valueOf(dataSnapshot.child("debt").getValue().toString());
                                 if(Integer.valueOf(moneyC) > debt){
-                                    Toast.makeText(getApplicationContext(),"Số tiền thu không được quá số tiền nợ",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(),"Số tiền thu không được quá số tiền nợ",Toast.LENGTH_LONG).show();
                                 }
                                 else{
                                     customer.child("debt").setValue(debt - Integer.valueOf(moneyC));
@@ -403,11 +384,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 }
                             }
                         });
-                    }
-                    else {
-                        receiptModel receiptModel = new receiptModel(id_1,date.getText().toString(),Integer.valueOf(moneyC));
-                        receipt.child(receiptModel.getMaPhieuThu()).setValue(receiptModel);
-                    }
                 }
 
 
