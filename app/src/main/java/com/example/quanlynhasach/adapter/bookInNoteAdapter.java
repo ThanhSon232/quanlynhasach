@@ -53,7 +53,7 @@ public class bookInNoteAdapter extends RecyclerView.Adapter<bookInNoteAdapter.bo
         holder.type.setText(books.get(position).getTheLoai());
         holder.author.setText(books.get(position).getTacGia());
         holder.price.setText(books.get(position).getDonGia().toString());
-        holder.quantity.setText(books.get(position).getSoLuongConLai().toString());
+        holder.quantity.setText(books.get(position).getSoLuongNhap().toString());
         Picasso.get().load(books.get(position).getHinhAnh()).into(holder.image);
         holder.whole_book.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

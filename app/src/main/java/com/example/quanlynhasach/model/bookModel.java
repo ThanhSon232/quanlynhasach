@@ -7,9 +7,29 @@ public class bookModel {
     String tacGia;
     Integer donGia;
     Integer soLuongConLai;
+    Integer soLuongNhap;
     String hinhAnh;
 
     public bookModel() {
+    }
+
+    public Integer getSoLuongNhap() {
+        return soLuongNhap;
+    }
+
+    public void setSoLuongNhap(Integer soLuongNhap) {
+        this.soLuongNhap = soLuongNhap;
+    }
+
+    public bookModel(String maSach, String tenSach, String theLoai, String tacGia, Integer donGia, Integer soLuongConLai, Integer soLuongNhap, String hinhAnh) {
+        this.maSach = maSach;
+        this.tenSach = tenSach;
+        this.theLoai = theLoai;
+        this.tacGia = tacGia;
+        this.donGia = donGia;
+        this.soLuongConLai = soLuongConLai;
+        this.soLuongNhap = soLuongNhap;
+        this.hinhAnh = hinhAnh;
     }
 
     public bookModel(String maSach, String tenSach, String theLoai, String tacGia, Integer donGia, Integer soLuongConLai, String hinhAnh) {

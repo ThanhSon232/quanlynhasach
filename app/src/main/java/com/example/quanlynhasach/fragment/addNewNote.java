@@ -83,7 +83,8 @@ public class addNewNote extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.random:
-                noteID.setText(UUID.randomUUID().toString());
+                String z[] = UUID.randomUUID().toString().split("-");
+                noteID.setText(z[0]);
                 break;
             case R.id.add:
                 DatabaseReference rule = database.getReference().child("rule");
@@ -126,7 +127,8 @@ public class addNewNote extends Fragment implements View.OnClickListener{
                                     @Override
                                     public void onSuccess(DataSnapshot dataSnapshot) {
                                         bookModel bookModel = dataSnapshot.getValue(com.example.quanlynhasach.model.bookModel.class);
-                                        bookModel.setSoLuongConLai(Integer.valueOf(quantity.getText().toString()));
+                                        bookModel.setSoLuongNhap(Integer.valueOf(quantity.getText().toString()));
+                                        bookModel.setSoLuongConLai(bookModel.getSoLuongConLai());
                                         bookModelArrayList.add(bookModel);
                                         bookInNoteAdapter.notifyDataSetChanged();
                                     }
@@ -151,24 +153,24 @@ public class addNewNote extends Fragment implements View.OnClickListener{
                     Toast.makeText(getContext(),"Lỗi",Toast.LENGTH_LONG).show();
                 }
                 else {
-                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+                    String timeStamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
                     DatabaseReference arrayTicketRef = database.getReference("notes");
                     ArrayList<bookModel> bookModelArrayList = new ArrayList<>();
                     for(bookModel model : bookInNoteAdapter.getBooks()){
-                        bookModel tempModel = new bookModel(model.getMaSach(),null,null,null,null,model.getSoLuongConLai(),null);
+                        bookModel tempModel = new bookModel(model.getMaSach(),null,null,null,null,model.getSoLuongConLai(),model.getSoLuongNhap(),null);
                         bookModelArrayList.add(tempModel);
                         DatabaseReference updateQuantity = database.getReference("books/"+model.getMaSach()+"/soLuongConLai");
                         updateQuantity.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                updateQuantity.setValue(Integer.valueOf(task.getResult().getValue().toString())+ tempModel.getSoLuongConLai());
+                                updateQuantity.setValue(Integer.valueOf(task.getResult().getValue().toString())+ tempModel.getSoLuongNhap());
                             }
                         });
                     }
                     noteModel noteModel = new noteModel(i,timeStamp, bookModelArrayList);
                     arrayTicketRef.child(noteModel.getNoteID()).setValue(noteModel);
-//                    getActivity().getSupportFragmentManager().popBackStack("addNewNote", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//                    getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
+                    getActivity().getSupportFragmentManager().popBackStack("addNewNote", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
 
                 }
                 break;

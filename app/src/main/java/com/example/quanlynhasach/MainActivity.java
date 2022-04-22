@@ -65,13 +65,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageButton option;
     FirebaseDatabase database;
     ruleFragment ruleFragment = new ruleFragment();
-
+    reportBookFragment reportBookFragment = new reportBookFragment();
+    ImageButton clock;
     TextView email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
+        clock = findViewById(R.id.clock);
         if(mAuth.getCurrentUser()==null){
             startActivity(new Intent(this,login_register_fragment.class));
         }
@@ -99,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager.beginTransaction().add(R.id.fragment_layout, customerFragment, "customerFragment").hide(customerFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, goodReceivedNoteFragment, "goodReceivedNoteFragment").hide(goodReceivedNoteFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, ruleFragment, "ruleFragment").hide(ruleFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fragment_layout, reportBookFragment, "reportBookFragment").hide(reportBookFragment).commit();
         activeFragment = bookFragment;
     }
 
@@ -111,37 +114,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.staff:
                 fragmentManager.beginTransaction().hide(activeFragment).show(staffFragment).commit();
                 activeFragment = staffFragment;
+                clock.setVisibility(View.GONE);
                 break;
             case R.id.bill:
                 fragmentManager.beginTransaction().hide(activeFragment).show(billFragment).commit();
                 activeFragment = billFragment;
+                clock.setVisibility(View.GONE);
                 break;
             case R.id.book:
                 fragmentManager.beginTransaction().hide(activeFragment).show(bookFragment).commit();
                 activeFragment = bookFragment;
+                clock.setVisibility(View.GONE);
                 break;
             case R.id.note:
                 fragmentManager.beginTransaction().hide(activeFragment).show(goodReceivedNoteFragment).commit();
                 activeFragment = goodReceivedNoteFragment;
+                clock.setVisibility(View.GONE);
                 break;
 
             case R.id.customer:
                 fragmentManager.beginTransaction().hide(activeFragment).show(customerFragment).commit();
                 activeFragment = customerFragment;
+                clock.setVisibility(View.GONE);
                 break;
 
             case R.id.receipt:
                 fragmentManager.beginTransaction().hide(activeFragment).show(receiptFragment).commit();
                 activeFragment = receiptFragment;
+                clock.setVisibility(View.GONE);
                 break;
 
             case R.id.log_out:
                 mAuth.signOut();
                 startActivity(new Intent(this,login_register_fragment.class));
+                clock.setVisibility(View.GONE);
                 break;
             case R.id.rule:
                 fragmentManager.beginTransaction().hide(activeFragment).show(ruleFragment).commit();
                 activeFragment = ruleFragment;
+                clock.setVisibility(View.GONE);
+                break;
+            case R.id.report1:
+                fragmentManager.beginTransaction().hide(activeFragment).show(reportBookFragment).commit();
+                activeFragment = reportBookFragment;
+                clock.setVisibility(View.VISIBLE);
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

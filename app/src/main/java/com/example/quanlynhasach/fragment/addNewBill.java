@@ -133,8 +133,6 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                 break;
             case R.id.add:
                 DatabaseReference rule = database.getReference().child("rule");
-
-
                 rule.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -146,8 +144,6 @@ public class addNewBill extends Fragment implements View.OnClickListener{
 
                     }
                 });
-
-
                 LayoutInflater factory = LayoutInflater.from(getContext());
                 View deleteDialogView = factory.inflate(R.layout.note_input_dialog, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -175,7 +171,7 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                                     @Override
                                     public void onSuccess(DataSnapshot dataSnapshot) {
                                         bookModel bookModel = dataSnapshot.getValue(com.example.quanlynhasach.model.bookModel.class);
-                                        bookModel.setSoLuongConLai(Integer.valueOf(quantity.getText().toString()));
+                                        bookModel.setSoLuongNhap(Integer.valueOf(quantity.getText().toString()));
                                         bookModelArrayList.add(bookModel);
                                         bookInNoteAdapter.notifyDataSetChanged();
                                     }
@@ -212,12 +208,14 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                                     // of the selected item
                                     switch (which) {
                                         case 0:
+                                            String ID = customerID.getText().toString();
                                             DatabaseReference arrayTicketRef = database.getReference("bills");
                                             ArrayList<bookModel> bookModelArrayList = new ArrayList<>();
+                                            DatabaseReference updateDebt1 = database.getReference("customer/"+ID);
                                             for(bookModel model : bookInNoteAdapter.getBooks()){
-                                                bookModel tempModel = new bookModel(model.getMaSach(),null,null,null,null,model.getSoLuongConLai(),null);
+                                                bookModel tempModel = new bookModel(model.getMaSach(),null,null,null,null,model.getSoLuongNhap(),null);
                                                 bookModelArrayList.add(tempModel);
-                                                debt += model.getDonGia()*model.getSoLuongConLai();
+                                                debt += model.getDonGia()*model.getSoLuongNhap();
                                                 DatabaseReference updateQuantity = database.getReference("books/"+model.getMaSach()+"/soLuongConLai");
                                                 updateQuantity.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                                     @Override
@@ -226,6 +224,12 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                                                     }
                                                 });
                                             }
+                                            updateDebt1.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                                @Override
+                                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                                    updateDebt1.child("debt").setValue(Integer.valueOf(dataSnapshot.child("debt").getValue().toString()) + debt);
+                                                }
+                                            });
                                             billModel bill = new billModel(id.getText().toString(),date.getText().toString(),customerName.getText().toString(),customerID.getText().toString(), bookModelArrayList);
                                             arrayTicketRef.child(bill.getId()).setValue(bill);
                                             addNewReceipt();
