@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseDatabase database;
     ruleFragment ruleFragment = new ruleFragment();
     reportBookFragment reportBookFragment = new reportBookFragment();
+    debtReportFragment debtReportFragment = new debtReportFragment();
     ImageButton clock;
     TextView email;
     @Override
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager.beginTransaction().add(R.id.fragment_layout, ruleFragment, "ruleFragment").hide(ruleFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, receiptFragment, "receiptFragment").hide(receiptFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, reportBookFragment, "reportBookFragment").hide(reportBookFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fragment_layout, debtReportFragment, "debtReportFragment").hide(debtReportFragment).commit();
         activeFragment = bookFragment;
     }
 
@@ -160,6 +162,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.report1:
                 fragmentManager.beginTransaction().hide(activeFragment).show(reportBookFragment).commit();
                 activeFragment = reportBookFragment;
+                clock.setVisibility(View.VISIBLE);
+                break;
+            case R.id.report2:
+                fragmentManager.beginTransaction().hide(activeFragment).show(debtReportFragment).commit();
+                activeFragment = debtReportFragment;
                 clock.setVisibility(View.VISIBLE);
                 break;
         }

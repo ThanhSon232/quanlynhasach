@@ -5,16 +5,38 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.11614583333333334" />
         <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/drawable/borderbackground.xml" value="0.1395" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/activity_login_register_fragment.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/activity_main.xml" value="0.12158054711246201" />
         <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/add_new_bill.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/add_new_book.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/add_new_customer.xml" value="0.25" />
         <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/addd.xml" value="0.2125" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/appbar.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/bill.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/bill_input_dialog.xml" value="0.25" />
         <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/book.xml" value="0.12158054711246201" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/cell.xml" value="0.25" />
         <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/customer.xml" value="0.1" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/customer_dialog.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/date_picker_dialog.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_add_new_note.xml" value="0.25" />
         <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_bill.xml" value="0.25" />
         <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_book.xml" value="0.176" />
         <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_book_detail.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_customer.xml" value="0.25" />
         <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_good_received_note.xml" value="0.25" />
         <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_login.xml" value="0.16" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_receipt.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_register.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_report_book.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_rule.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/fragment_staff.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/good_received_note.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/layout_header_nav.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/note.xml" value="0.25" />
         <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/note_input_dialog.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/receipt.xml" value="0.25" />
+        <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/layout/up_item_fragment.xml" value="0.25" />
         <entry key="..\:/Users/trant/Documents/GitHub/quanlynhasach/app/src/main/res/menu/menu_nav.xml" value="0.25" />
         <entry key="app/src/main/res/drawable-v24/customloginbutton.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/customlogininput.xml" value="0.1" />
