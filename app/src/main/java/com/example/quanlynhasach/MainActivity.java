@@ -46,6 +46,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager.beginTransaction().add(R.id.fragment_layout, customerFragment, "customerFragment").hide(customerFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, goodReceivedNoteFragment, "goodReceivedNoteFragment").hide(goodReceivedNoteFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, ruleFragment, "ruleFragment").hide(ruleFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.fragment_layout, receiptFragment, "receiptFragment").hide(receiptFragment).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_layout, reportBookFragment, "reportBookFragment").hide(reportBookFragment).commit();
         activeFragment = bookFragment;
     }
@@ -432,9 +435,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     address.setText(customerModel.getAddress());
                     email.setText(customerModel.getEmail());
                     phoneNumber.setText(customerModel.getPhoneNumber());
-                    long millis = System.currentTimeMillis();
-                    java.sql.Date date_1 = new java.sql.Date(millis);
-                    date.setText(date_1 + "");
+                    String timeStamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+                    date.setText(timeStamp);
                 }
                 else {
                     Toast.makeText(getApplicationContext(),"Khong tìm thấy ID",Toast.LENGTH_LONG).show();

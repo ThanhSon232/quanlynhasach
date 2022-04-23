@@ -86,7 +86,7 @@ public class reportBookFragment extends Fragment {
         Query query = myRef.child("notes").orderByChild("date");
         query.addValueEventListener(new ValueEventListener() {
             ArrayList<noteModel> noteModels = new ArrayList<>();
-
+            ArrayList<billModel> billModels = new ArrayList<>();
             HashMap<String,reportBookModel> map = new HashMap<>();
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -101,7 +101,7 @@ public class reportBookFragment extends Fragment {
                     for(int j = 0 ; j < noteModels.get(i).getItems().size();j++){
                         bookModel t = noteModels.get(i).getItems().get(j);
                        if(!map.containsKey(t.getMaSach())){
-                           map.put(t.getMaSach(),new reportBookModel(j,t.getMaSach(),s,t.getSoLuongConLai(),t.getSoLuongNhap(),0));
+                           map.put(t.getMaSach(),new reportBookModel(j,t.getMaSach(),t.getTenSach(),s,t.getSoLuongConLai(),t.getSoLuongNhap(),0));
                        }
                        else {
                            map.get(t.getMaSach()).setPhatSinh(map.get(t.getMaSach()).getPhatSinh() + t.getSoLuongNhap());
@@ -109,12 +109,43 @@ public class reportBookFragment extends Fragment {
                     }
                 }
 
-                for(Map.Entry<String,reportBookModel> e : map.entrySet()){
-                    arrayList.add(e.getValue());
-                }
+                Query query = myRef.child("bills").orderByChild("date");
+                query.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot data : snapshot.getChildren()){
+                            String str[] = data.child("date").getValue().toString().split(" ");
+                            if(str[0].endsWith(s)){
+                                billModels.add(data.getValue(billModel.class));
+                            }
+                        }
+
+                        for(int i = 0 ; i < billModels.size() ; i++){
+                            for(int j = 0 ; j < billModels.get(i).getItems().size();j++){
+                                bookModel t = billModels.get(i).getItems().get(j);
+                                map.get(t.getMaSach()).setTonCuoi((map.get(t.getMaSach()).getTonCuoi() + t.getSoLuongConLai()));
+                            }
+                        }
+
+                        int i = 1;
+                        for(Map.Entry<String,reportBookModel> e : map.entrySet()){
+                            reportBookModel temp = e.getValue();
+                            temp.setStt(i);
+                            temp.setTonCuoi(e.getValue().getTonDau() + e.getValue().getPhatSinh() - e.getValue().getTonCuoi());
+                            arrayList.add(temp);
+                            i++;
+                        }
 
 
-                adapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
             }
 
             @Override

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="135dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
@@ -10,7 +10,7 @@
     >
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         android:orientation="vertical"
         >
 
@@ -18,9 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Phiếu nhập kho"
+                android:text="Phiếu thu tiền"
                 android:layout_centerHorizontal="true"
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -34,13 +35,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mã phiếu nhập: "
+                android:text="Mã khách hàng: "
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 />
 
             <TextView
-                android:id="@+id/noteID"
+                android:id="@+id/customerID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="..."
@@ -54,7 +55,27 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ngày nhập: "
+                android:text="Mã phiếu thu: "
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                />
+
+            <TextView
+                android:id="@+id/bill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="..."
+                android:textColor="@color/black"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ngày lập: "
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 />
@@ -74,7 +95,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Số loại sản phẩm: "
+                android:text="Số tiền thu: "
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 />

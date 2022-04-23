@@ -13,34 +13,34 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quanlynhasach.R;
-import com.example.quanlynhasach.model.noteModel;
+import com.example.quanlynhasach.model.receiptModel;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class noteAdapter extends RecyclerView.Adapter<noteAdapter.noteViewHolder>{
-    ArrayList<noteModel> noteModels;
+public class receiptAdapter extends RecyclerView.Adapter<receiptAdapter.receiptViewHolder>{
+    ArrayList<receiptModel> receiptModels;
     Context context;
 
-    public noteAdapter(ArrayList<noteModel> noteModels, Context context) {
-        this.noteModels = noteModels;
+    public receiptAdapter(ArrayList<receiptModel> receiptModels, Context context) {
+        this.receiptModels = receiptModels;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public noteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.note,parent,false);
-        return new noteViewHolder(view);
-    }
+    public receiptViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.receipt,parent,false);
+        return new receiptViewHolder(view);    }
 
     @Override
-    public void onBindViewHolder(@NonNull noteViewHolder holder, int position) {
-        if(noteModels.isEmpty()) return;
-        holder.noteID.setText(noteModels.get(position).getNoteID());
-        holder.date.setText(noteModels.get(position).getDate());
-        holder.quantity.setText(noteModels.get(position).getItems().size() + "");
+    public void onBindViewHolder(@NonNull receiptViewHolder holder, int position) {
+        if(receiptModels.isEmpty()) return;
+        holder.date.setText(receiptModels.get(position).getNgayLap());
+        holder.billID.setText(receiptModels.get(position).getMaPhieuThu());
+        holder.customerID.setText(receiptModels.get(position).getCustomerID());
+        holder.quantity.setText(receiptModels.get(position).getSoTien() +"");
         holder.whole.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -50,7 +50,7 @@ public class noteAdapter extends RecyclerView.Adapter<noteAdapter.noteViewHolder
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 FirebaseDatabase database = FirebaseDatabase.getInstance("https://quanlynhasach-c1a4c-default-rtdb.asia-southeast1.firebasedatabase.app/");
-                                DatabaseReference myRef = database.getReference().child("notes/"+noteModels.get(holder.getAdapterPosition()).getNoteID());
+                                DatabaseReference myRef = database.getReference().child("receipt/"+receiptModels.get(holder.getAdapterPosition()).getCustomerID() + "/" +receiptModels.get(holder.getAdapterPosition()).getMaPhieuThu());
                                 myRef.removeValue();
                                 break;
 
@@ -71,17 +71,21 @@ public class noteAdapter extends RecyclerView.Adapter<noteAdapter.noteViewHolder
 
     @Override
     public int getItemCount() {
-        return noteModels.size();
+        return receiptModels.size();
     }
 
-    class noteViewHolder extends RecyclerView.ViewHolder{
-        TextView noteID;
+    class receiptViewHolder extends RecyclerView.ViewHolder{
+        TextView name;
+        TextView customerID;
+        TextView billID;
         TextView date;
         TextView quantity;
         CardView whole;
-        public noteViewHolder(@NonNull View itemView) {
+        public receiptViewHolder(@NonNull View itemView) {
             super(itemView);
-            noteID = itemView.findViewById(R.id.noteID);
+            name = itemView.findViewById(R.id.name);
+            customerID = itemView.findViewById(R.id.customerID);
+            billID = itemView.findViewById(R.id.bill);
             date = itemView.findViewById(R.id.date);
             quantity = itemView.findViewById(R.id.quantity);
             whole = itemView.findViewById(R.id.whole);

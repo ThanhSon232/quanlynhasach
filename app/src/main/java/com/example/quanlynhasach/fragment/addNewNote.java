@@ -157,7 +157,7 @@ public class addNewNote extends Fragment implements View.OnClickListener{
                     DatabaseReference arrayTicketRef = database.getReference("notes");
                     ArrayList<bookModel> bookModelArrayList = new ArrayList<>();
                     for(bookModel model : bookInNoteAdapter.getBooks()){
-                        bookModel tempModel = new bookModel(model.getMaSach(),null,null,null,null,model.getSoLuongConLai(),model.getSoLuongNhap(),null);
+                        bookModel tempModel = new bookModel(model.getMaSach(),model.getTenSach(),null,null,null,model.getSoLuongConLai(),model.getSoLuongNhap(),null);
                         bookModelArrayList.add(tempModel);
                         DatabaseReference updateQuantity = database.getReference("books/"+model.getMaSach()+"/soLuongConLai");
                         updateQuantity.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {

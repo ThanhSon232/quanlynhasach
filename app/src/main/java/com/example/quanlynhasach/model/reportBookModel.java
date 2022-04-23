@@ -2,6 +2,7 @@ package com.example.quanlynhasach.model;
 
 public class reportBookModel {
     Integer stt;
+    String id;
     String tenSach;
     String ngay;
     Integer tonDau;
@@ -11,8 +12,9 @@ public class reportBookModel {
     public reportBookModel() {
     }
 
-    public reportBookModel(Integer stt, String tenSach, String ngay, Integer tonDau, Integer phatSinh, Integer tonCuoi) {
+    public reportBookModel(Integer stt, String id, String tenSach, String ngay, Integer tonDau, Integer phatSinh, Integer tonCuoi) {
         this.stt = stt;
+        this.id = id;
         this.tenSach = tenSach;
         this.ngay = ngay;
         this.tonDau = tonDau;

@@ -2,8 +2,18 @@ package com.example.quanlynhasach.model;
 
 public class receiptModel {
     String maPhieuThu;
+    String customerID;
     String ngayLap;
     Integer soTien;
+
+    public String getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(String customerID) {
+        this.customerID = customerID;
+    }
+
 
     public receiptModel(String maPhieuThu, String ngayLap, Integer soTien) {
         this.maPhieuThu = maPhieuThu;

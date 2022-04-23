@@ -99,8 +99,9 @@ public class addNewBill extends Fragment implements View.OnClickListener{
     }
 
     void getData(){
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-        id.setText(UUID.randomUUID().toString());
+        String timeStamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+        String str[] = UUID.randomUUID().toString().split("-");
+        id.setText(str[0]);
         date.setText(timeStamp);
 
     }
@@ -240,9 +241,9 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                                             DatabaseReference updateDebt = database.getReference("customer/"+ID_1);
                                             ArrayList<bookModel> bookModelArrayList1 = new ArrayList<>();
                                             for(bookModel model : bookInNoteAdapter.getBooks()){
-                                                bookModel tempModel = new bookModel(model.getMaSach(),null,null,null,null,model.getSoLuongConLai(),null);
+                                                bookModel tempModel = new bookModel(model.getMaSach(),null,null,null,null,model.getSoLuongNhap(),null);
                                                 bookModelArrayList1.add(tempModel);
-                                                debt += model.getDonGia()*model.getSoLuongConLai();
+                                                debt += model.getDonGia()*model.getSoLuongNhap();
                                                 DatabaseReference updateQuantity = database.getReference("books/"+model.getMaSach()+"/soLuongConLai");
                                                 updateQuantity.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                                     @Override
@@ -353,9 +354,8 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                     address.setText(customerModel.getAddress());
                     email.setText(customerModel.getEmail());
                     phoneNumber.setText(customerModel.getPhoneNumber());
-                    long millis = System.currentTimeMillis();
-                    java.sql.Date date_1 = new java.sql.Date(millis);
-                    date.setText(date_1 + "");
+                    String timeStamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+                    date.setText(timeStamp + "");
                 }
                 else {
                     Toast.makeText(getContext(),"Khong tìm thấy ID",Toast.LENGTH_LONG).show();
