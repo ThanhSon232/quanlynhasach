@@ -47,6 +47,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -68,15 +70,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseDatabase database;
     ruleFragment ruleFragment = new ruleFragment();
     reportBookFragment reportBookFragment = new reportBookFragment();
+    Integer debt;
+
     debtReportFragment debtReportFragment = new debtReportFragment();
-    ImageButton clock;
     TextView email;
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-yyyy");
+    LocalDateTime now = LocalDateTime.now();
+    String monthYear = dtf.format(now);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
-        clock = findViewById(R.id.clock);
         if(mAuth.getCurrentUser()==null){
             startActivity(new Intent(this,login_register_fragment.class));
         }
@@ -119,55 +124,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.staff:
                 fragmentManager.beginTransaction().hide(activeFragment).show(staffFragment).commit();
                 activeFragment = staffFragment;
-                clock.setVisibility(View.GONE);
+
                 break;
             case R.id.bill:
                 fragmentManager.beginTransaction().hide(activeFragment).show(billFragment).commit();
                 activeFragment = billFragment;
-                clock.setVisibility(View.GONE);
+
                 break;
             case R.id.book:
                 fragmentManager.beginTransaction().hide(activeFragment).show(bookFragment).commit();
                 activeFragment = bookFragment;
-                clock.setVisibility(View.GONE);
+
                 break;
             case R.id.note:
                 fragmentManager.beginTransaction().hide(activeFragment).show(goodReceivedNoteFragment).commit();
                 activeFragment = goodReceivedNoteFragment;
-                clock.setVisibility(View.GONE);
+
                 break;
 
             case R.id.customer:
                 fragmentManager.beginTransaction().hide(activeFragment).show(customerFragment).commit();
                 activeFragment = customerFragment;
-                clock.setVisibility(View.GONE);
+
                 break;
 
             case R.id.receipt:
                 fragmentManager.beginTransaction().hide(activeFragment).show(receiptFragment).commit();
                 activeFragment = receiptFragment;
-                clock.setVisibility(View.GONE);
+
                 break;
 
             case R.id.log_out:
                 mAuth.signOut();
                 startActivity(new Intent(this,login_register_fragment.class));
-                clock.setVisibility(View.GONE);
+
                 break;
             case R.id.rule:
                 fragmentManager.beginTransaction().hide(activeFragment).show(ruleFragment).commit();
                 activeFragment = ruleFragment;
-                clock.setVisibility(View.GONE);
+
                 break;
             case R.id.report1:
                 fragmentManager.beginTransaction().hide(activeFragment).show(reportBookFragment).commit();
                 activeFragment = reportBookFragment;
-                clock.setVisibility(View.VISIBLE);
                 break;
+
             case R.id.report2:
                 fragmentManager.beginTransaction().hide(activeFragment).show(debtReportFragment).commit();
                 activeFragment = debtReportFragment;
-                clock.setVisibility(View.VISIBLE);
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -396,10 +400,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 else {
                         DatabaseReference customer = database.getReference().child("customer/"+id.getText().toString());
+                        DatabaseReference Debt = database.getReference("debt/"+id.getText().toString());
                         customer.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                             @Override
                             public void onSuccess(DataSnapshot dataSnapshot) {
-                                Integer debt = Integer.valueOf(dataSnapshot.child("debt").getValue().toString());
+                                debt = Integer.valueOf(dataSnapshot.child("debt").getValue().toString());
                                 if(Integer.valueOf(moneyC) > debt){
                                     Toast.makeText(getApplicationContext(),"Số tiền thu không được quá số tiền nợ",Toast.LENGTH_LONG).show();
                                 }
@@ -408,6 +413,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     receiptModel receiptModel = new receiptModel(id_1,date.getText().toString(),Integer.valueOf(moneyC));
                                     receipt.child(receiptModel.getMaPhieuThu()).setValue(receiptModel);
                                 }
+                            }
+                        });
+                        Debt.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                            @Override
+                            public void onSuccess(DataSnapshot dataSnapshot) {
+
+                                Debt.child(monthYear+"/last").setValue(debt - Integer.valueOf(moneyC));
                             }
                         });
                 }

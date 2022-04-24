@@ -46,6 +46,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
@@ -57,15 +59,23 @@ public class addNewBill extends Fragment implements View.OnClickListener{
     Button find;
     ImageButton previous;
     Integer debt = 0;
+    Integer preDebt;
     Button add;
     ImageButton check;
     RecyclerView recyclerView;
     TextView customerName;
+    boolean _check =true;
     LinearLayout name;
     ruleModel _rule;
     ArrayList<bookModel> bookModelArrayList = new ArrayList<>();
     com.example.quanlynhasach.adapter.bookInNoteAdapter bookInNoteAdapter;
     FirebaseDatabase database;
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-yyyy");
+    LocalDateTime now = LocalDateTime.now();
+    String monthYear = dtf.format(now);
+    String preMonthYear = dtf.format(now.minusMonths(1));
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -127,6 +137,7 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                             }
                             else {
                                 Toast.makeText(getContext(),"Lỗi",Toast.LENGTH_LONG).show();
+
                             }
                         }
                     });
@@ -213,33 +224,89 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                                             DatabaseReference arrayTicketRef = database.getReference("bills");
                                             ArrayList<bookModel> bookModelArrayList = new ArrayList<>();
                                             DatabaseReference updateDebt1 = database.getReference("customer/"+ID);
+                                            DatabaseReference Debt = database.getReference("debt/"+ID);
+
+                                            for(bookModel model : bookInNoteAdapter.getBooks()){
+                                                debt += model.getDonGia()*model.getSoLuongNhap();
+
+                                            }
+
+
+                                            updateDebt1.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                                @Override
+                                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                                    preDebt = Integer.valueOf(dataSnapshot.child("debt").getValue().toString());
+                                                    Integer totalDebt = preDebt+ debt;
+                                                    if(!(totalDebt>_rule.getTienNoToiDa()&&_rule.isSwitch2())){
+                                                        updateDebt1.child("debt").setValue(totalDebt);
+                                                    }
+                                                }
+                                            });
+
+
+                                            debt=0;
                                             for(bookModel model : bookInNoteAdapter.getBooks()){
                                                 bookModel tempModel = new bookModel(model.getMaSach(),null,null,null,null,model.getSoLuongNhap(),null);
                                                 bookModelArrayList.add(tempModel);
+
                                                 debt += model.getDonGia()*model.getSoLuongNhap();
                                                 DatabaseReference updateQuantity = database.getReference("books/"+model.getMaSach()+"/soLuongConLai");
                                                 updateQuantity.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                                        updateQuantity.setValue(Integer.valueOf(task.getResult().getValue().toString())- tempModel.getSoLuongConLai());
+                                                        if(!((preDebt+debt)>_rule.getTienNoToiDa()&&_rule.isSwitch2())){
+                                                            updateQuantity.setValue(Integer.valueOf(task.getResult().getValue().toString())- tempModel.getSoLuongConLai());
+                                                        }
                                                     }
                                                 });
                                             }
-                                            updateDebt1.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                            Debt.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                                 @Override
                                                 public void onSuccess(DataSnapshot dataSnapshot) {
-                                                    updateDebt1.child("debt").setValue(Integer.valueOf(dataSnapshot.child("debt").getValue().toString()) + debt);
+                                                    Integer temp = preDebt;
+                                                    if(!((preDebt+debt)>_rule.getTienNoToiDa()&&_rule.isSwitch2())){
+                                                    Debt.child(monthYear+"/last").setValue(temp + debt);
+
+                                                    billModel bill = new billModel(id.getText().toString(),date.getText().toString(),customerName.getText().toString(),customerID.getText().toString(), bookModelArrayList);
+                                                    arrayTicketRef.child(bill.getId()).setValue(bill);
+                                                    addNewReceipt();
+                                                    }
+                                                    else{
+
+                                                        Toast.makeText(getContext(),"Vượt quá nợ tối đa",Toast.LENGTH_LONG).show();
+                                                    }
                                                 }
                                             });
-                                            billModel bill = new billModel(id.getText().toString(),date.getText().toString(),customerName.getText().toString(),customerID.getText().toString(), bookModelArrayList);
-                                            arrayTicketRef.child(bill.getId()).setValue(bill);
-                                            addNewReceipt();
+
+
+
                                             break;
                                         case 1:
                                             String ID_1 = customerID.getText().toString();
                                             DatabaseReference arrayTicketRef1 = database.getReference("bills");
                                             DatabaseReference updateDebt = database.getReference("customer/"+ID_1);
+                                            DatabaseReference Debt_1 = database.getReference("debt/"+ID_1);
                                             ArrayList<bookModel> bookModelArrayList1 = new ArrayList<>();
+
+                                            for(bookModel model : bookInNoteAdapter.getBooks()){
+
+                                                debt += model.getDonGia()*model.getSoLuongNhap();
+
+                                            }
+
+                                            updateDebt.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                                @Override
+                                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                                    preDebt = Integer.valueOf(dataSnapshot.child("debt").getValue().toString());
+                                                    if(!((preDebt+debt)>_rule.getTienNoToiDa()&&_rule.isSwitch2())){
+
+                                                        updateDebt.child("debt").setValue(Integer.valueOf(dataSnapshot.child("debt").getValue().toString()) + debt);
+                                                    }
+                                                }
+                                            });
+
+
+                                            debt=0;
                                             for(bookModel model : bookInNoteAdapter.getBooks()){
                                                 bookModel tempModel = new bookModel(model.getMaSach(),null,null,null,null,model.getSoLuongNhap(),null);
                                                 bookModelArrayList1.add(tempModel);
@@ -248,20 +315,33 @@ public class addNewBill extends Fragment implements View.OnClickListener{
                                                 updateQuantity.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                                        updateQuantity.setValue(Integer.valueOf(task.getResult().getValue().toString())- tempModel.getSoLuongConLai());
+                                                        if(!((preDebt+debt)>_rule.getTienNoToiDa()&&_rule.isSwitch2())){
+                                                            updateQuantity.setValue(Integer.valueOf(task.getResult().getValue().toString())- tempModel.getSoLuongConLai());
+                                                        }
+
                                                     }
                                                 });
                                             }
-                                            updateDebt.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+
+
+                                            Debt_1.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                                 @Override
                                                 public void onSuccess(DataSnapshot dataSnapshot) {
-                                                    updateDebt.child("debt").setValue(Integer.valueOf(dataSnapshot.child("debt").getValue().toString()) + debt);
+                                                    if(!((preDebt+debt)>_rule.getTienNoToiDa()&&_rule.isSwitch2())) {
+                                                        Integer temp = preDebt;
+                                                        Debt_1.child(monthYear + "/last").setValue(temp + debt);
+                                                        billModel bill1 = new billModel(id.getText().toString(),date.getText().toString(),customerName.getText().toString(),customerID.getText().toString(), bookModelArrayList1);
+                                                        arrayTicketRef1.child(bill1.getId()).setValue(bill1);
+                                                        getActivity().getSupportFragmentManager().popBackStack("addNewBill", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                                        getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
+                                                    }else{
+
+                                                    }
                                                 }
                                             });
-                                            billModel bill1 = new billModel(id.getText().toString(),date.getText().toString(),customerName.getText().toString(),customerID.getText().toString(), bookModelArrayList1);
-                                            arrayTicketRef1.child(bill1.getId()).setValue(bill1);
-                                            getActivity().getSupportFragmentManager().popBackStack("addNewBill", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                            getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
+
+
+
                                             break;
                                         case 2:
                                             getActivity().getSupportFragmentManager().popBackStack("addNewBill", FragmentManager.POP_BACK_STACK_INCLUSIVE);

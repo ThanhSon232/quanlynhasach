@@ -54,7 +54,7 @@ public class reportBookFragment extends Fragment {
         TableColumnDpWidthModel columnModel = new TableColumnDpWidthModel(getContext(), 6, 100);
         columnModel.setColumnWidth(1, 200);
         tableView.setColumnModel(columnModel);
-        clock = getActivity().findViewById(R.id.clock);
+        clock = view.findViewById(R.id.clock);
         clock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
