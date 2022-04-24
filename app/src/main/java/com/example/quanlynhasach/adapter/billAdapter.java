@@ -2,17 +2,24 @@ package com.example.quanlynhasach.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.quanlynhasach.MainActivity;
 import com.example.quanlynhasach.R;
+import com.example.quanlynhasach.fragment.addNewNote;
+import com.example.quanlynhasach.fragment.updateBill;
 import com.example.quanlynhasach.model.billModel;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,8 +45,6 @@ public class billAdapter extends RecyclerView.Adapter<billAdapter.billViewHolder
     @Override
     public void onBindViewHolder(@NonNull billViewHolder holder, int position) {
         if(billModelArrayList.isEmpty()) return;
-
-//        holder.name.setText(billModelArrayList.get(position).getCustomerName());
         holder.date.setText(billModelArrayList.get(position).getDate());
         holder.billID.setText(billModelArrayList.get(position).getId());
         holder.customerID.setText(billModelArrayList.get(position).getCustomerID());
@@ -68,6 +73,17 @@ public class billAdapter extends RecyclerView.Adapter<billAdapter.billViewHolder
                 builder.setMessage("Bạn có muốn xóa?").setPositiveButton("Có", dialogClickListener)
                         .setNegativeButton("Không", dialogClickListener).show();
                 return true;
+            }
+        });
+        holder.whole.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateBill updateBill = new updateBill();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data",  billModelArrayList.get(holder.getAdapterPosition()));
+                updateBill.setArguments(bundle);
+                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_layout,updateBill).addToBackStack("updateBill").commit();
+                ((AppCompatActivity) context).findViewById(R.id.appbar).setVisibility(View.GONE);
             }
         });
     }

@@ -1,8 +1,14 @@
 package com.example.quanlynhasach.model;
 
-import java.util.ArrayList;
+import android.os.Parcelable;
 
-public class billModel {
+import androidx.annotation.NonNull;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.stream.Stream;
+
+public class billModel  implements Serializable  {
     String id;
     String date;
     String customerName;
@@ -59,4 +65,5 @@ public class billModel {
     public void setItems(ArrayList<bookModel> items) {
         this.items = items;
     }
+
 }

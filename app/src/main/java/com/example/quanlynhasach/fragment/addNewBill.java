@@ -344,9 +344,7 @@ public class addNewBill extends Fragment implements View.OnClickListener{
 
                                             break;
                                         case 2:
-                                            getActivity().getSupportFragmentManager().popBackStack("addNewBill", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                            getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
-                                            break;
+                                              break;
 
                                     }
                                 }

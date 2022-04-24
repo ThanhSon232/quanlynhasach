@@ -3,9 +3,12 @@ package com.example.quanlynhasach.adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -80,6 +83,31 @@ public class bookInNoteAdapter extends RecyclerView.Adapter<bookInNoteAdapter.bo
                 return true;
             }
         });
+        holder.update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Nhập số lượng mới");
+                final EditText input = new EditText(context);
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                builder.setView(input);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        books.get(holder.getAdapterPosition()).setSoLuongNhap(Integer.valueOf(input.getText().toString()));
+                        holder.quantity.setText(books.get(holder.getAdapterPosition()).getSoLuongNhap().toString());
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            }
+        });
 
     }
 
@@ -91,6 +119,7 @@ public class bookInNoteAdapter extends RecyclerView.Adapter<bookInNoteAdapter.bo
         TextView quantity;
         ImageView image;
         RelativeLayout whole_book;
+        Button update;
         public bookViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title);
@@ -100,6 +129,7 @@ public class bookInNoteAdapter extends RecyclerView.Adapter<bookInNoteAdapter.bo
             quantity = itemView.findViewById(R.id.quantity);
             image = itemView.findViewById(R.id.picture);
             whole_book = itemView.findViewById(R.id.whole_book);
+            update = itemView.findViewById(R.id.update);
         }
     }
 }
