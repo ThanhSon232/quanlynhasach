@@ -18,6 +18,7 @@ import com.example.quanlynhasach.adapter.debtReportAdapter;
 import com.example.quanlynhasach.adapter.reportBookAdapter;
 import com.example.quanlynhasach.model.billModel;
 import com.example.quanlynhasach.model.bookModel;
+import com.example.quanlynhasach.model.debtModel;
 import com.example.quanlynhasach.model.debtReportModel;
 import com.example.quanlynhasach.model.noteModel;
 import com.example.quanlynhasach.model.reportBookModel;
@@ -39,10 +40,11 @@ import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 public class debtReportFragment extends Fragment {
     TableView<debtReportModel> tableView;
     ImageButton clock;
-    String[] header = {"STT","Khách hàng","Tháng","Nợ đầu","Đã trả","Nợ cuối"};
+    String[] header = {"STT","Khách hàng","Tháng","Nợ đầu","Phát Sinh","Nợ cuối"};
     debtReportAdapter adapter;
     ArrayList<debtReportModel> arrayList = new ArrayList<debtReportModel>();
     FirebaseDatabase database;
+    ArrayList<debtModel> _debt;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,10 +73,18 @@ public class debtReportFragment extends Fragment {
                             Toast.makeText(getContext(),date,Toast.LENGTH_LONG).show();
                                 }
                         else {
-                            date = i1+"-"+i;
-                            if(i1>2&&i1<=12){
-                                preDate = (i1-1)+"-"+i;
+                            if(i1>=10){
+                                date = i1+"-"+i;
                             }else{
+                                date = "0"+i1+"-"+i;
+                            }
+
+                            if(i1>2&&i1<=10){
+                                preDate = "0"+(i1-1)+"-"+i;
+                            }else if(i1>10){
+                                preDate = (i1-1)+"-"+i;
+                            }
+                            else{
                                 preDate=12+"-"+(i-1);
                             }
                         }
@@ -90,20 +100,32 @@ public class debtReportFragment extends Fragment {
     }
 
     void getData(String date, String preDate){
+
         DatabaseReference myRef = database.getReference();
-        myRef.child("debt").addValueEventListener(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot data : snapshot.getChildren()){
-                    System.out.println(data.child(data.getKey()).child(date).getValue());
-                    
+                int count=1;
+                for(DataSnapshot data: snapshot.child("debt").getChildren()){
+                    Integer stt = count;
+                    String id = data.getKey();
+                    String tenKhachHang = snapshot.child("customer/"+id+"/name").getValue().toString();
+                    int noDau = Integer.valueOf(data.child(date+"/last").getValue().toString());
+                    int noCuoi = Integer.valueOf(data.child(preDate+"/last").getValue().toString());
+                    int phatSinh = noCuoi - noDau;
+                    count++;
+                    debtReportModel temp=new debtReportModel(stt,id,tenKhachHang,date,noDau,phatSinh,noCuoi);
+                    arrayList.add(temp);
                 }
+                adapter.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
+
+
     }
 
 }
