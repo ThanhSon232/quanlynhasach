@@ -100,7 +100,7 @@ public class debtReportFragment extends Fragment {
     }
 
     void getData(String date, String preDate){
-
+        arrayList.clear();
         DatabaseReference myRef = database.getReference();
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
