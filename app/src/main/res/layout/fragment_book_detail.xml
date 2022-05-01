@@ -42,12 +42,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
                     android:text="Product"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:layout_centerHorizontal="true"
-                    />
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
 
 <!--                <ImageButton-->
 <!--                    android:id="@+id/cart"-->
@@ -63,11 +62,19 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/detailPrice"
+        android:id="@+id/labelPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/frame"
         android:layout_marginLeft="10dp"
+        android:text="Giá : "
+        android:textSize="23sp" />
+    <TextView
+        android:id="@+id/detailPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/labelPrice"
+        android:layout_marginLeft="70dp"
         android:layout_marginTop="15dp"
         android:text="asd"
         android:textColor="@color/black"
@@ -75,22 +82,43 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/detailQuantity"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/frame"
+        android:id="@+id/labelQuantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/detailQuantity"
+        android:layout_toLeftOf="@+id/detailQuantity"
+        android:text="Số lượng : "
+        android:textSize="23sp" />
+
+    <TextView
+        android:id="@+id/detailQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/frame"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
         android:text="asd"
-        android:textSize="23sp"
-        android:textStyle="bold"
         android:textColor="@color/black"
-        />
+        android:textSize="23sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_marginTop="30dp"
+        android:id="@+id/labelName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/detailPrice"
+        android:layout_marginLeft="10dp"
+        android:text="Tên sách : "
+        android:textColor="@color/black"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/detailName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/detailPrice"
+        android:layout_toRightOf="@+id/labelName"
+        android:layout_alignBottom="@+id/labelName"
         android:layout_marginLeft="10dp"
         android:text="asdkl"
         android:textColor="@color/black"
@@ -98,25 +126,48 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/detailType"
+        android:id="@+id/labelType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/detailName"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
+        android:text="Thể loại:"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/detailType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/labelType"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/labelType"
         android:text="author option:"
+        android:textStyle="bold"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/labelAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/detailType"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Tác Giả : "
         android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/detailAuthor"
-        android:layout_below="@+id/detailType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/labelAuthor"
+        android:layout_alignBottom="@+id/labelAuthor"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft = "10dp"
+        android:textStyle="bold"
         android:text="Author: "
-        android:textColor="@color/black"
-        />
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/detailDescription"
