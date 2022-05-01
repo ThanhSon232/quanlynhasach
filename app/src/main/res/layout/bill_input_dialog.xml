@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#FFE494"
     android:id="@+id/note_dialog"
     >
     <TextView
@@ -9,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="Thêm phiếu thu"
+
         android:textSize="20sp"
         android:textColor="@color/black"
         />
@@ -44,14 +46,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
+
                 <Button
-                    android:layout_alignParentRight="true"
                     android:id="@+id/find"
-                    android:textSize="15sp"
-                    android:text="tìm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    />
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="8dp"
+                    android:backgroundTint="@color/FireBrick"
+                    android:text="tìm"
+                    android:textSize="15sp" />
             </RelativeLayout>
         </LinearLayout>
 

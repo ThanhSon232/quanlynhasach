@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="#FFE494"
     android:layout_height="wrap_content"
     android:id="@+id/customer_dialog"
     >
@@ -36,13 +37,15 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <Button
-                    android:layout_alignParentRight="true"
                     android:id="@+id/find"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="tìm"
-                    />
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="8dp"
+                    android:backgroundTint="@color/FireBrick"
+                    android:text="tìm" />
 
                 <EditText
                     android:layout_toLeftOf="@id/find"

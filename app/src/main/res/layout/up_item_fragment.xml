@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     app:behavior_hideable="true"
+    android:background="#F6EED5"
     app:behavior_peekHeight= "300dp"
     android:padding="5dp"
     app:layout_behavior="com.google.android.material">
