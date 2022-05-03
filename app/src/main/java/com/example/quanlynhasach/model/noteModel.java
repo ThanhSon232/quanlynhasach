@@ -1,9 +1,10 @@
 package com.example.quanlynhasach.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class noteModel {
+public class noteModel implements Serializable {
     String noteID;
     String date;
     ArrayList<bookModel> items;

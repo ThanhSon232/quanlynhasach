@@ -59,7 +59,6 @@ public class receiptFragment extends Fragment {
                     for(DataSnapshot t : data.getChildren()){
                         receiptModel model = t.getValue(receiptModel.class);
                         model.setCustomerID(data.getKey() +"");
-                        System.out.println(model.getCustomerID()  + " - " + model.getMaPhieuThu());
                         receipt.add(model);
                     }
 

@@ -2,6 +2,7 @@ package com.example.quanlynhasach.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quanlynhasach.R;
+import com.example.quanlynhasach.fragment.updateBill;
+import com.example.quanlynhasach.fragment.updateReceived;
 import com.example.quanlynhasach.model.noteModel;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -65,6 +69,18 @@ public class noteAdapter extends RecyclerView.Adapter<noteAdapter.noteViewHolder
                 builder.setMessage("Bạn có muốn xóa?").setPositiveButton("Có", dialogClickListener)
                         .setNegativeButton("Không", dialogClickListener).show();
                 return true;
+            }
+        });
+
+        holder.whole.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateReceived updateBill = new updateReceived();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("data",  noteModels.get(holder.getAdapterPosition()));
+                updateBill.setArguments(bundle);
+                ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_layout,updateBill).addToBackStack("updateReceived").commit();
+                ((AppCompatActivity) context).findViewById(R.id.appbar).setVisibility(View.GONE);
             }
         });
     }

@@ -127,7 +127,6 @@ public class updateBill extends Fragment implements View.OnClickListener{
                     bookModelArrayList.add(temp);
                }
                 bookInNoteAdapter.notifyDataSetChanged();
-                System.out.println(snapshot);
             }
 
             @Override
@@ -224,6 +223,7 @@ public class updateBill extends Fragment implements View.OnClickListener{
 
                 break;
             case R.id.edit_ok:
+                Toast.makeText(getContext(),"Clicked",Toast.LENGTH_LONG).show();
                 String ID_1 = customerID.getText().toString();
                 DatabaseReference arrayTicketRef1 = database.getReference("bills");
                 DatabaseReference updateDebt = database.getReference("customer/"+ID_1);
@@ -278,13 +278,11 @@ public class updateBill extends Fragment implements View.OnClickListener{
                             Debt_1.child(monthYear + "/last").setValue(temp - oldDebt + debt);
                             billModel bill1 = new billModel(id.getText().toString(),date.getText().toString(),customerName.getText().toString(),customerID.getText().toString(), bookModelArrayList1);
                             arrayTicketRef1.child(bill1.getId()).setValue(bill1);
-                            getActivity().getSupportFragmentManager().popBackStack("updateBill", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                            getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
-                        }else{
-
                         }
                     }
                 });
+                getActivity().getSupportFragmentManager().popBackStack("updateBill", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                getActivity().findViewById(R.id.appbar).setVisibility(View.VISIBLE);
                 break;
         }
     }
