@@ -86,6 +86,7 @@ public class receiptAdapter extends RecyclerView.Adapter<receiptAdapter.receiptV
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String moneyC = money.getText().toString();
+                        Integer oldDebt = receiptModels.get(holder.getAdapterPosition()).getSoTien();
                         DatabaseReference receipt = database.getReference().child("receipt/"+id.getText().toString());
                         if(TextUtils.isEmpty(moneyC)){
                             Toast.makeText(context,"Phải nhập tiền",Toast.LENGTH_LONG).show();
@@ -101,7 +102,7 @@ public class receiptAdapter extends RecyclerView.Adapter<receiptAdapter.receiptV
                                         Toast.makeText(context,"Số tiền thu không được quá số tiền nợ",Toast.LENGTH_LONG).show();
                                     }
                                     else{
-                                        customer.child("debt").setValue(debt - Integer.valueOf(moneyC));
+                                        customer.child("debt").setValue(debt  + oldDebt - Integer.valueOf(moneyC));
                                         receiptModel receiptModel = new receiptModel(receiptModels.get(holder.getAdapterPosition()).getMaPhieuThu(),date.getText().toString(),Integer.valueOf(moneyC));
                                         receipt.child(receiptModel.getMaPhieuThu()).setValue(receiptModel);
                                         Debt.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
@@ -110,7 +111,7 @@ public class receiptAdapter extends RecyclerView.Adapter<receiptAdapter.receiptV
                                                 String monthYear = date.getText().toString();
                                                 monthYear = monthYear.split(" ")[0];
                                                 monthYear = monthYear.substring(3,monthYear.length());
-                                                Debt.child(monthYear+"/last").setValue(Integer.valueOf(dataSnapshot.child(monthYear+"/last").getValue().toString()) - Integer.valueOf(moneyC));
+                                                Debt.child(monthYear+"/last").setValue(Integer.valueOf(dataSnapshot.child(monthYear+"/last").getValue().toString()) + oldDebt - Integer.valueOf(moneyC));
                                             }
                                         });
                                     }

@@ -96,7 +96,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
         email = headerView.findViewById(R.id.email);
-        email.setText(mAuth.getCurrentUser().getEmail());
+        if(mAuth.getCurrentUser() != null) {
+            email.setText(mAuth.getCurrentUser().getEmail());
+        }
         option = findViewById(R.id.add);
         option.setOnClickListener(this);
         setUpNavigation();
