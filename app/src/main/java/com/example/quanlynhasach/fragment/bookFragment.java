@@ -94,12 +94,14 @@ public class bookFragment extends Fragment implements View.OnClickListener {
                     }
                     bookAdapter.notifyDataSetChanged();
                 }
-                if(spinner.getSelectedItem().toString().equals("Mã")){
+                else if(spinner.getSelectedItem().toString().equals("Mã")){
                     String key = searchBar.getText().toString();
                     view_books.clear();
                     for (bookModel b:books){
-                        if(b.getMaSach().toLowerCase().contains(key.toLowerCase())){
-                            view_books.add(b);
+                        if(b.getMaSach()!=null){
+                            if(b.getMaSach().toLowerCase().contains(key.toLowerCase())){
+                                view_books.add(b);
+                            }
                         }
                     }
                     bookAdapter.notifyDataSetChanged();
